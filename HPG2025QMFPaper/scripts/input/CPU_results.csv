@@ -1,0 +1,47 @@
+2025-04-11T15:28:07-07:00
+Running bin/QMFBenchmark
+Run on (6 X 1728 MHz CPU s)
+CPU Caches:
+  L1 Data 64 KiB (x6)
+  L1 Instruction 64 KiB (x6)
+  L2 Unified 256 KiB (x6)
+  L3 Unified 2048 KiB (x1)
+Load Average: 0.42, 0.30, 0.19
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+name,iterations,real_time,cpu_time,time_unit,bytes_per_second,items_per_second,label,error_occurred,error_message,"PerInstanceScratch","PerModelBytes","TotalBytes"
+"BM_cpuSbs_aura/iterations:5000/manual_time",5000,210976,2.48533e+06,ns,,,,,,0,5.83622e+06,5.83622e+06
+"BM_cpuSkinDecomp_aura/iterations:5000/manual_time",5000,282137,2.54951e+06,ns,,,,,,9600,309536,319136
+"BM_cpuQMF_aura<uint8_t>/iterations:5000/manual_time",5000,104817,2.36691e+06,ns,,,,,,2400,76789,79189
+"BM_cpuQMF_aura<uint32_t>/iterations:5000/manual_time",5000,151516,2.23116e+06,ns,,,,,,2400,88461,90861
+"BM_cpuQMF_aura<uint16_t>/iterations:5000/manual_time",5000,106277,2.36813e+06,ns,,,,,,2400,111789,114189
+"BM_cpuQMF_aura<float>/iterations:5000/manual_time",5000,94056.9,2.17711e+06,ns,,,,,,2400,181789,184189
+"BM_cpuSbs_proteus/iterations:5000/manual_time",5000,915498,3.31313e+06,ns,,,,,,0,2.29039e+07,2.29039e+07
+"BM_cpuSkinDecomp_proteus/iterations:5000/manual_time",5000,1.07506e+06,3.38535e+06,ns,,,,,,9600,1.09234e+06,1.10194e+06
+"BM_cpuQMF_proteus<uint8_t>/iterations:5000/manual_time",5000,423335,2.7102e+06,ns,,,,,,2400,244640,247040
+"BM_cpuQMF_proteus<uint32_t>/iterations:5000/manual_time",5000,550720,2.65405e+06,ns,,,,,,2400,281312,283712
+"BM_cpuQMF_proteus<uint16_t>/iterations:5000/manual_time",5000,423046,2.71614e+06,ns,,,,,,2400,354640,357040
+"BM_cpuQMF_proteus<float>/iterations:5000/manual_time",5000,383271,2.49873e+06,ns,,,,,,2400,574640,577040
+"BM_cpuSbs_jupiter/iterations:5000/manual_time",5000,217039,2.48463e+06,ns,,,,,,0,5.91847e+06,5.91847e+06
+"BM_cpuSkinDecomp_jupiter/iterations:5000/manual_time",5000,282012,2.54987e+06,ns,,,,,,9600,309536,319136
+"BM_cpuQMF_jupiter<uint8_t>/iterations:5000/manual_time",5000,88850.2,2.34685e+06,ns,,,,,,2400,66945,69345
+"BM_cpuQMF_jupiter<uint32_t>/iterations:5000/manual_time",5000,133061,2.21123e+06,ns,,,,,,2400,76945,79345
+"BM_cpuQMF_jupiter<uint16_t>/iterations:5000/manual_time",5000,94009.3,2.35582e+06,ns,,,,,,2400,96945,99345
+"BM_cpuQMF_jupiter<float>/iterations:5000/manual_time",5000,84771.8,2.16547e+06,ns,,,,,,2400,156945,159345
+"BM_cpuSbs_boz/iterations:5000/manual_time",5000,925618,3.32751e+06,ns,,,,,,0,2.23933e+07,2.23933e+07
+"BM_cpuSkinDecomp_boz/iterations:5000/manual_time",5000,1.07424e+06,3.38779e+06,ns,,,,,,9600,1.09234e+06,1.10194e+06
+"BM_cpuQMF_boz<uint8_t>/iterations:5000/manual_time",5000,409517,2.69808e+06,ns,,,,,,2400,244538,246938
+"BM_cpuQMF_boz<uint32_t>/iterations:5000/manual_time",5000,541343,2.64851e+06,ns,,,,,,2400,281206,283606
+"BM_cpuQMF_boz<uint16_t>/iterations:5000/manual_time",5000,415792,2.72284e+06,ns,,,,,,2400,354538,356938
+"BM_cpuQMF_boz<float>/iterations:5000/manual_time",5000,378154,2.49695e+06,ns,,,,,,2400,574538,576938
+"BM_cpuSbs_carlos/iterations:5000/manual_time",5000,3.00474e+06,5.54048e+06,ns,,,,,,0,2.29039e+07,2.29039e+07
+"BM_cpuSkinDecomp_carlos/iterations:5000/manual_time",5000,1.10499e+06,3.40479e+06,ns,,,,,,9600,1.20434e+06,1.21394e+06
+"BM_cpuQMF_carlos<uint8_t>/iterations:5000/manual_time",5000,488766,2.77952e+06,ns,,,,,,2400,304640,307040
+"BM_cpuQMF_carlos<uint32_t>/iterations:5000/manual_time",5000,681752,2.79034e+06,ns,,,,,,2400,351312,353712
+"BM_cpuQMF_carlos<uint16_t>/iterations:5000/manual_time",5000,500861,2.82111e+06,ns,,,,,,2400,444640,447040
+"BM_cpuQMF_carlos<float>/iterations:5000/manual_time",5000,447063,2.55765e+06,ns,,,,,,2400,724640,727040
+"BM_cpuSbs_louise/iterations:5000/manual_time",5000,797391,3.17756e+06,ns,,,,,,0,2.26741e+07,2.26741e+07
+"BM_cpuSkinDecomp_louise/iterations:5000/manual_time",5000,943503,3.25204e+06,ns,,,,,,9600,1.04233e+06,1.05193e+06
+"BM_cpuQMF_louise<uint8_t>/iterations:5000/manual_time",5000,417989,2.70264e+06,ns,,,,,,2400,280856,283256
+"BM_cpuQMF_louise<uint32_t>/iterations:5000/manual_time",5000,566762,2.66818e+06,ns,,,,,,2400,324192,326592
+"BM_cpuQMF_louise<uint16_t>/iterations:5000/manual_time",5000,421926,2.71413e+06,ns,,,,,,2400,410856,413256
+"BM_cpuQMF_louise<float>/iterations:5000/manual_time",5000,373549,2.48055e+06,ns,,,,,,2400,670856,673256

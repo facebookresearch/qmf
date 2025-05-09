@@ -1,0 +1,47 @@
+2025-04-11T15:37:24-07:00
+Running bin/QMFBenchmark
+Run on (6 X 1728 MHz CPU s)
+CPU Caches:
+  L1 Data 64 KiB (x6)
+  L1 Instruction 64 KiB (x6)
+  L2 Unified 256 KiB (x6)
+  L3 Unified 2048 KiB (x1)
+Load Average: 0.83, 0.90, 0.58
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+name,iterations,real_time,cpu_time,time_unit,bytes_per_second,items_per_second,label,error_occurred,error_message,"PerInstanceScratch","PerModelBytes","TotalBytes","TotalIfDistinct"
+"BM_cuda10Sbs_aura/1/manual_time",4842,1.42525e+06,836166,ns,,,,,,0,7.5073e+06,7.5073e+06,7.5073e+07
+"BM_cuda10SkinDecomp_aura/manual_time",28084,248120,277286,ns,,,,,,9600,309540,405540,3.1914e+06
+"BM_cuda10QMF_aura<uint8_t>/1/0/manual_time",33627,207907,237095,ns,,,,,,2400,96951,120951,993510
+"BM_cuda10QMF_aura<uint32_t>/1/0/manual_time",32306,216859,246553,ns,,,,,,2400,108623,132623,1.11023e+06
+"BM_cuda10QMF_aura<uint16_t>/1/0/manual_time",33623,210289,239389,ns,,,,,,2400,131951,155951,1.34351e+06
+"BM_cuda10QMF_aura<float>/1/0/manual_time",31211,224747,254683,ns,,,,,,2400,201951,225951,2.04351e+06
+"BM_cuda10Sbs_proteus/1/manual_time",1175,5.85164e+06,941155,ns,,,,,,0,2.94517e+07,2.94517e+07,2.94517e+08
+"BM_cuda10SkinDecomp_proteus/manual_time",14162,493601,465920,ns,,,,,,9600,1.09234e+06,1.18834e+06,1.10194e+07
+"BM_cuda10QMF_proteus<uint8_t>/1/0/manual_time",25245,277983,306917,ns,,,,,,2400,312432,336432,3.14832e+06
+"BM_cuda10QMF_proteus<uint32_t>/1/0/manual_time",20360,347130,376377,ns,,,,,,2400,349104,373104,3.51504e+06
+"BM_cuda10QMF_proteus<uint16_t>/1/0/manual_time",23600,292889,321626,ns,,,,,,2400,422432,446432,4.24832e+06
+"BM_cuda10QMF_proteus<float>/1/0/manual_time",22613,309436,337832,ns,,,,,,2400,642432,666432,6.44832e+06
+"BM_cuda10Sbs_jupiter/1/manual_time",4754,1.47279e+06,819515,ns,,,,,,0,7.61375e+06,7.61375e+06,7.61375e+07
+"BM_cuda10SkinDecomp_jupiter/manual_time",28129,249295,278093,ns,,,,,,9600,309540,405540,3.1914e+06
+"BM_cuda10QMF_jupiter<uint8_t>/1/0/manual_time",33781,206892,235875,ns,,,,,,2400,86157,110157,885570
+"BM_cuda10QMF_jupiter<uint32_t>/1/0/manual_time",32170,216543,246256,ns,,,,,,2400,96157,120157,985570
+"BM_cuda10QMF_jupiter<uint16_t>/1/0/manual_time",33088,209839,238152,ns,,,,,,2400,116157,140157,1.18557e+06
+"BM_cuda10QMF_jupiter<float>/1/0/manual_time",32062,218412,247309,ns,,,,,,2400,176157,200157,1.78557e+06
+"BM_cuda10Sbs_boz/1/manual_time",1223,5.73232e+06,938653,ns,,,,,,0,2.87948e+07,2.87948e+07,2.87948e+08
+"BM_cuda10SkinDecomp_boz/manual_time",14144,493715,467703,ns,,,,,,9600,1.09234e+06,1.18834e+06,1.10194e+07
+"BM_cuda10QMF_boz<uint8_t>/1/0/manual_time",24807,281409,309984,ns,,,,,,2400,316054,340054,3.18454e+06
+"BM_cuda10QMF_boz<uint32_t>/1/0/manual_time",20177,349211,378802,ns,,,,,,2400,352722,376722,3.55122e+06
+"BM_cuda10QMF_boz<uint16_t>/1/0/manual_time",23622,294234,322687,ns,,,,,,2400,426054,450054,4.28454e+06
+"BM_cuda10QMF_boz<float>/1/0/manual_time",22190,316192,344281,ns,,,,,,2400,646054,670054,6.48454e+06
+"BM_cuda10Sbs_carlos/1/manual_time",539,1.28558e+07,953197,ns,,,,,,0,2.94517e+07,2.94517e+07,2.94517e+08
+"BM_cuda10SkinDecomp_carlos/manual_time",12203,570589,498302,ns,,,,,,9600,1.20434e+06,1.30034e+06,1.21394e+07
+"BM_cuda10QMF_carlos<uint8_t>/1/0/manual_time",22338,313123,341988,ns,,,,,,2400,393990,417990,3.9639e+06
+"BM_cuda10QMF_carlos<uint32_t>/1/0/manual_time",17856,395475,421243,ns,,,,,,2400,440662,464662,4.43062e+06
+"BM_cuda10QMF_carlos<uint16_t>/1/0/manual_time",21048,332525,361582,ns,,,,,,2400,533990,557990,5.3639e+06
+"BM_cuda10QMF_carlos<float>/1/0/manual_time",19207,363087,390785,ns,,,,,,2400,813990,837990,8.1639e+06
+"BM_cuda10Sbs_louise/1/manual_time",1312,5.34926e+06,960732,ns,,,,,,0,2.91558e+07,2.91558e+07,2.91558e+08
+"BM_cuda10SkinDecomp_louise/manual_time",13561,510172,457207,ns,,,,,,9600,1.04234e+06,1.13834e+06,1.05194e+07
+"BM_cuda10QMF_louise<uint8_t>/1/0/manual_time",24288,290478,319084,ns,,,,,,2400,369308,393308,3.71708e+06
+"BM_cuda10QMF_louise<uint32_t>/1/0/manual_time",19577,355588,383748,ns,,,,,,2400,412644,436644,4.15044e+06
+"BM_cuda10QMF_louise<uint16_t>/1/0/manual_time",22821,305790,333853,ns,,,,,,2400,499308,523308,5.01708e+06
+"BM_cuda10QMF_louise<float>/1/0/manual_time",20869,334676,361336,ns,,,,,,2400,759308,783308,7.61708e+06

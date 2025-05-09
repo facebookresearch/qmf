@@ -1,0 +1,104 @@
+{
+  "generatedGeomPrimitives": [
+    "skin_decomposition_laplacian_mesh",
+    "sparse_factorization_wrinkles_mesh",
+    "blendshape_mesh"
+  ],
+  "generatedInvisibleGeomPrimitives": [],
+  "processingNodes": [
+    {
+      "name": "BlendShapes",
+      "type": "BlendShapesAndSkin",
+      "parameters": {
+        "OutMesh": "blendshape_mesh",
+        "Skeleton": "/world/skeleton",
+        "Surface": "/world/meshBlendshapes",
+        "Mode": 1
+      }
+    },
+    {
+      "name": "SkinDecompositionLaplacian",
+      "type": "BlendShapesAndSkin",
+      "parameters": {
+        "OutMesh": "skin_decomposition_laplacian_mesh",
+        "Skeleton": "/world/skeleton",
+        "Surface": "/world/meshSkinDecompositionLaplacian",
+        "Mode": 3
+      }
+    },
+    {
+      "name": "SparseFactorizationWrinkles",
+      "type": "BlendShapesAndSkin",
+      "parameters": {
+        "OutMesh": "sparse_factorization_wrinkles_mesh",
+        "Skeleton": "/world/skeleton",
+        "Surface": "/world/meshCompressedSF",
+        "Mode": 4
+      }
+    },
+    {
+      "name": "DiffSkinDecompositionLaplacian",
+      "type": "GeometryDiff",
+      "dependsOn": [
+        "SkinDecompositionLaplacian",
+        "BlendShapes"
+      ],
+      "parameters": {
+        "OutMesh": "skin_decomposition_laplacian_mesh",
+        "InMesh": "blendshape_mesh",
+        "MaxDistance": 0.5
+      }
+    },
+    {
+      "name": "DiffSparseFactorizationWrinkles",
+      "type": "GeometryDiff",
+      "dependsOn": [
+        "SparseFactorizationWrinkles",
+        "BlendShapes"
+      ],
+      "parameters": {
+        "OutMesh": "sparse_factorization_wrinkles_mesh",
+        "InMesh": "blendshape_mesh",
+        "MaxDistance": 0.5
+      }
+    },
+    {
+      "name": "TransformSkinDecompositionLaplacian",
+      "type": "Transform",
+      "dependsOn": [
+        "DiffSkinDecompositionLaplacian"
+      ],
+      "parameters": {
+        "Mesh": "skin_decomposition_laplacian_mesh",
+        "TranslateX": 20.0,
+        "TranslateY": 0.0,
+        "TranslateZ": 0.0,
+        "ScaleX": 1.0,
+        "ScaleY": 1.0,
+        "ScaleZ": 1.0,
+        "RotateX": 0.0,
+        "RotateY": 0.0,
+        "RotateZ": 0.0
+      }
+    },
+    {
+      "name": "TransformSparseFactorizationWrinkles",
+      "type": "Transform",
+      "dependsOn": [
+        "DiffSparseFactorizationWrinkles"
+      ],
+      "parameters": {
+        "Mesh": "sparse_factorization_wrinkles_mesh",
+        "TranslateX": 40.0,
+        "TranslateY": 0.0,
+        "TranslateZ": 0.0,
+        "ScaleX": 1.0,
+        "ScaleY": 1.0,
+        "ScaleZ": 1.0,
+        "RotateX": 0.0,
+        "RotateY": 0.0,
+        "RotateZ": 0.0
+      }
+    }
+  ]
+}
