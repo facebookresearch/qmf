@@ -1,0 +1,3 @@
+@default_files = ("0_Main");
+$pdf_mode = 1;
+$pdflatex = 'pdflatex -synctex=1 -interaction=nonstopmode';

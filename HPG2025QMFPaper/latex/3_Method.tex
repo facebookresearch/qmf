@@ -1,0 +1,324 @@
+\section{Method}
+A classical blendshape model comprising $\numVertices$ vertices and $\numBS$ blendshapes, can be formulated using the rest pose mesh and "deltas" between the rest pose and individual blendshapes \cite{lewis2014practice}:
+\begin{equation}
+\vertexPos_{0,i} + \sum_{k} \bSWeight_k \Delta\vertexPos_{k,i}
+\label {eq:ShapeCalculation}
+\end{equation}
+where $\vertexPos_{0,i}\in\reals^3$ is the $i$-th rest-pose vertex, $\Delta\vertexPos_{k,i}$  denotes the positional difference between the $i$-th vertex of the $k$-th blendshape and its corresponding vertex in the rest pose, and
+$\bSWeight_k$ are blendshape weights defining facial expression; in this paper, we treat these as inputs. In typical runtime systems, the $\bSWeight_k$ are computed via facial rigs which may also contain nonlinearities \cite{lewis2014practice}, but the subsequent blending is linear. We can stack all of the blendshapes into a matrix $\matA\in\reals^{3\numBS \times \numVertices}$:
+\[
+\matA =
+\begin{bmatrix}
+  \Delta\vertexPos_{1,1} & \dots & \Delta\vertexPos_{1,\numVertices} \\
+  \vdots & \ddots & \vdots \\
+  \Delta\vertexPos_{\numBS,1} & \dots & \Delta\vertexPos_{\numBS,\numVertices} \\
+\end{bmatrix}
+\]
+Modern models often consist of hundreds to thousands of blendshapes and thus the storage of the matrix $\matA$ is an important consideration. The runtime speed of facial expression calculation is primarily determined by fetching elements of $\matA$ from memory. One of the main objectives of our method is to develop an efficient representation for $\matA$ to enhance the real-time performance of facial expression calculations while simultaneously reducing the memory footprint.
+
+Our method represents matrix $\matA$ as the product of two sparse matrices, $\matB\in\reals^{3S\times \numColumnB}$ and $\matC\in\reals^{\numColumnB\times \numVertices}$, where $\numColumnB$ is a hyper parameter. The problem of sparse factorization of matrix $\matA$ can be formulated as the following minimization problem:
+%\begin{equation}
+%  \min \| \matA - \matB\matC \|_p
+%    \label{eq:Minimization} % todo add "subject to:" ?
+%\end{equation}
+\begin{equation}
+  \min_{\matB, \matC} \| \matA - \matB\matC \| \\
+    \label{eq:Minimization} % todo add "subject to:" ?
+\end{equation}
+subject to the sparsity constraints on $\matB$ and $\matC$. 
+%The error norm is typically the Frobenius norm or its higher-order powers \cite{kavan2024compressed}. 
+%These standard norms work well, but in \Section{sec:newNorm} we will introduce a norm that better preserves high frequency details.
+%We do not optimize the rest pose positions $\vertexPos_{0,i}$.
+%, as any imperfection in this position will affect quality of every blendshape so we assumed it to be given data. \LK{I didn't understand the previous sentence...}
+%We have implemented \Equation{eq:Minimization} in PyTorch. The only constraints we apply on this stage was total number of non-zero values in both matrices $\matB$ and $\matC$. 
+%---
+%Our loss function primarily utilizes the standard Euclidean norm, corresponding to $p=2$\LK{this should be discussed earlier, right after the minimization problem equation}, which eliminates the need to calculate absolute values in \Equation{eq:Minimization}. To ensure a smooth approximation, we employed our improved loss function (\Eq{eq:NewLoss}).
+
+To find solutions for \Equation{eq:Minimization} we use the Adam optimizer. After each Adam iteration, we perform projection to the desired number of nonzeros, ensuring the sparsity of both matrices $\matB$ and $\matC$. These projections do not participate in automatic differentiation, just like with general proximal algorithms \cite{parikh2014proximal}. In our case, each projection consists of retaining only $\numNonzeroBC$ total number of non-zero values across both matrices $\matB$ and $\matC$. We tried other projection strategies, such as setting separate limits for the numbers of non-zero values for each matrix $\matB$ and $\matC$. However, simply retaining the $\numNonzeroBC$ largest numbers across both of the matrices gives the optimizer the most flexibility and yields the best results. Our method can allocate the non-zero values better than skinning decomposition methods; areas with more complex deformation receive a higher number of non-zero values.
+
+\subsection{Addressing missing wrinkles}\label{sec:newNorm}
+We found that both Dem Bones as well as \csfb lose wrinkles at medium to high compression rates (see \Figure{fig:Teaser}). This is because these previous works apply a Laplacian regularizer to ensure the approximation error is smooth:
+\begin{equation}
+ \min_{\matB, \matC}( \|\matA - \matB \matC \| + \alpha \|\Laplacian \matB \matC\| )
+ \label{eq:OldLoss}
+\end{equation}
+where $\Laplacian$ is the graph Laplacian.
+The Laplacian term penalizes large curvatures in $\matB \matC$ which leads to smooth error, but also smooths out the original signal, because the Laplacian is zero only for affine functions. This is especially problematic in areas where the original blendshapes $\matA$ have a large curvature, which is undesirably penalized by the regularization term, leading to over-smoothing of visually important details.
+
+To address these issues, we propose to replace the $\alpha \|\Laplacian \matB \matC\|$ with the following term: %loss that avoids the problems of the Laplacian regularizer: $\newNorm(\matA - \approxMatA)$, where 
+\begin{equation}
+\alpha \|\Laplacian(\matA - \matB \matC ) \|
+%\newNorm(\matM) = \| \matM \| + \alpha\|\Laplacian\matM\|
+%\|\Laplacian(\approxMatA -\matA)\|
+  \label{eq:NewLoss}
+\end{equation}
+%
+The seemingly minor change of applying the Laplacian to $\matA - \matB \matC$ means that the original blendshapes (i.e. the exact reconstruction: $\matA = \matB \matC$) would now receive zero regularization penalty -- even in high-curvature areas, avoiding the oversmoothing issues of the previous approach.
+
+\begin{comment}
+We have incorporated a new norm $\newNorm$ into \csfb \LK{this may be better discussed in Results, here we should probably focus on our new method and not digress into the potential improvements of CSFB...}. This approach yields visual improvements in areas with wrinkles, as demonstrated in \Figure{fig:CSFBAura}. Moreover, our results show enhanced quality for the models, leading to overall better performance of the skinning decomposition.
+\end{comment}
+
+% Optimization
+
+\begin{figure}
+  \parbox{0.3\linewidth}{
+    \includegraphics[width=\linewidth]{NnzBoz.jpg}
+    \subcaption{}
+    \label{nonZeroDistribution}
+  }
+  \parbox{0.29\linewidth}{
+    \includegraphics[width=\linewidth]{WrinclesMapBoz.jpg}
+    \subcaption{}
+    \label{wrinklesMap}
+  }
+  \parbox{0.3\linewidth}{
+    \includegraphics[width=\linewidth]{NnzBozAfter.jpg}
+    \subcaption{}
+    \label{nonZeroDistributionAfter}
+  }
+\captionsetup{subrefformat=parens}
+\caption{Sparse Factorization:
+\subref{nonZeroDistribution} Number of non-zero values in $\matC$ per vertex,
+\subref{wrinklesMap} wrinkles density $\wrinklesMap$,
+\subref{nonZeroDistributionAfter} number of non-zero values in $\matC$ after correction}
+    \label{fig:FloatsDistribution}
+\end{figure}
+
+
+\subsubsection{Further wrinkle improvements for sparse matrix factorization}
+While our new regularization term helps preserve the geometric error, high compression rates still lead to some degradation and over-smoothing. In this section we describe an additional technique we used to even better preserve the shape of high-frequency details like wrinkles.
+Unlike skinning decompositions methods, which use a fixed number of weights per vertex, sparse matrix factorization enables non-zero values to appear in the matrix where they will have the most impact to reduce overall loss (\Subfig{fig:FloatsDistribution}{nonZeroDistribution}) However, we found that it is beneficial to explicitly enforce more non-zeros and hence higher accuracy in high-curvature areas.
+Our initial hypothesis was that the optimization process would smooth out all deformations with high mean curvature; however, this proved to be incorrect. Instead, we found that the lack of detail preservation arose in areas where changes in mean curvature occurred only \emph{across a limited number of blendshapes} because the blendshapes themselves are used when calculating loss, and values appearing in few blendshapes will have less contribution in the loss (see \Figure{fig:QMFNewNormAndWrinkles}). In such cases the optimizer reduced the number of non-zero values per vertex making it impossible to reconstruct high curvature deformations. 
+%-------
+To identify these areas, we analyze the changes in mean curvature across all blendshapes.
+For the $i$-th vertex, we assess how its curvature varies across blendshapes by calculating the differences between its curvature in the rest pose and in each blendshape.
+$\Delta\meanCurvature_i = (|\meanCurvature_{1,i} - \meanCurvature_{0,i}|, \dots, |\meanCurvature_{S,i} - \meanCurvature_{0,i}|)^\tran$, where $\meanCurvature_{k,i}$ is mean curvature of $i$-th vertex in $k$-th blendshape. 
+To find vertices where curvature only changes in a few blendshapes we use
+\[
+\wrinklesMap_i = \max_j(\Delta\meanCurvature_{i,j})/ \overline{\Delta\meanCurvature^l_i}
+\]
+where $\overline{\Delta\meanCurvature^l_i}$ is the average of mean curvature "deltas"  for vertex $i$ excluding the $l$ largest values, with $l$ typically 5.
+\Subfigure{fig:FloatsDistribution}{wrinklesMap} shows a visualization of this metric.
+Since these calculations are performed only once, prior to the optimization process, we can afford to calculate the mean curvature accurately using the cotangent Laplacian matrix for each blendshape.
+%
+\begin{figure}
+    \includegraphics{wrinkles.pdf}
+    \caption{Wrinkles density calculation and QMF results left to right: Result with original loss function, new loss (wrinkles on right side only), new loss and wrinkles map (wrinkles on both sides) }
+    \label{fig:QMFNewNormAndWrinkles}
+\end{figure}
+%
+
+Once the winkles distribution is calculated, we can use it in optimization by multiplying the $i$-th column of matrix $\matC$ by $\wrinklesMult\wrinklesMap_i + 1$ before culling the values in matrices $\matB$ and $\matC$. The $\wrinklesMult$ parameter is chosen for each model to be the smallest value that preserves the original wrinkle areas.
+A situation could arise where several vertices have too many non-zero values, and that could degrade the quality of other areas.  To address this we limited the maximum number of non-zero values per vertex to 30. We can see the result of this corrected optimization in \Figure{fig:QMFNewNormAndWrinkles}.
+The calculation of the matrix $\wrinklesMap$ occurs once prior to the optimization, thus having negligible overhead.
+% \begin{figure}
+%     \includegraphics[width=0.31\linewidth, trim={3cm 29cm 12cm 19cm},clip]{evolutionSF_jupiter_SF_OldL.png}
+%     \includegraphics[width=0.31\linewidth, trim={3cm 29cm 12cm 19cm},clip]{evolutionSF_jupiter_SF_L.png}
+%     \includegraphics[width=0.31\linewidth, trim={3cm 29cm 12cm 19cm},clip]{evolutionSF_jupiter_SF_L_W.png}
+%     \caption{QMF results left to right: Result with original loss function, new loss (wrinkles on right side only), new loss and wrinkles map (wrinkles on both sides)}
+%     \label{fig:QMFNewNormAndWrinkles}
+% \end{figure}
+\subsection{Compression of sparse matrices}
+To efficiently encode indices for the sparse matrices $\matB$ and $\matC$, we utilize a modified compressed sparse row (CSR) format for matrix $\matB$ and a compressed sparse column (CSC) format for matrix $\matC$.   
+These choices are determined by the order of matrix multiplication at runtime. Specifically, for matrix $\matB$, we need to compute a weighted sum of its rows. In contrast, matrix $\matC$ serves as the second operand in the matrix multiplication, so we must access its elements column-wise (see \Section{sec:runtime}).
+
+Experimental results indicate that  $\numColumnB = 200$ (columns of $\matB$ and rows of $\matC$) is sufficient to achieve low errors. Because $\numColumnB \le 255$, we use an 8-bit representation to encode the column index for matrix $\matB$ and the row index for matrix $\matC$. Instead of storing an array of offsets, we store the number of non-zero values per row in matrix $\matB$ or per column in matrix $\matC$ and calculate offsets in order to calculate the next dot product during matrix multiplication. For example, see how \texttt{numValuesRow} is used in \Algorithm{alg:RuntimeCode}. 
+Consequently, for indexing both matrices, we need to store $\numVertices + 3\numBS + \numNonzeroBC$ bytes for $\numVertices$ vertices, $\numBS$ blendshapes, and $\numNonzeroBC$ non-zero values.
+%
+%--- Quantization
+\begin{figure}
+    % TODO make better image
+    \includegraphics[width=\linewidth]{quantizationMetric.pdf}
+    \caption{Quantization metrics}
+    \label{fig:QuantizationMetrics}
+\end{figure}
+\begin{figure}
+    \includegraphics[width=0.48\linewidth, trim={1cm 1cm 1cm 7cm},clip]{images/no_noise.png}
+    \includegraphics[width=0.48\linewidth, trim={1cm 1cm 1cm 7cm},clip]{images/noise.png}
+    \caption{Quantization Noise. Left: Original floating-point blendshape (Louise model), Right: blendshape after 8-bit quantization}
+    \label{fig:quantizationNoise}
+\end{figure}
+%
+
+Having significantly reduced the data for indexing the sparse matrices, what remains is to reduce the amount of memory used to encode the floating point non-zero values. We employ quantization to minimize the number of bits required to represent each value.
+After optimization is complete, we independently quantize the non-zero values for both matrices $\matB$ and $\matC$. For each of  $\matB$ and $\matC$, we find the minimum and maximum scalar values.  Then we use the following quantization formula for $Q$ bits:
+\begin{equation*}
+    V_Q = \text{round}((V - V_{min})/(V_{max} - V_{min}) \cdot (2^Q - 1))
+\end{equation*}
+
+We store $V_{min}$, $V_{max}$, and $Q$, and this allows us to dequantize via: 
+\begin{equation*}    
+    V = V_{min} + (V_Q * (V_{max} - V_{min}) )/(2^Q - 1)
+\end{equation*}
+
+
+%
+As shown in \Figure{fig:QuantizationMetrics}, our metrics degrade gradually as we reduce the number of bits per value. Notably, the data indicates that using 8-bit quantized values only slightly compromises the final quality of the shape, seeming to make it a viable option for optimizing memory usage.  However, despite the positional metrics' accuracy, we were able to discern visible noise with larger deformations on our denser models (see \Figure{fig:quantizationNoise}).  This quantization noise corresponds to areas where a small error will have a noticeable effect on local curvature.
+To address this, we employ the average edge angular difference metric (EAD, detailed in \Section{sec:results}) to compare the quantized matrices with their floating-point counterparts. We select a quantization factor that minimizes degradation of this metric, ensuring it remains within a few percent of the original value.
+
+The quantization levels  we have tried are 8-bit, 16-bit, and 10.66-bit.  10.66-bit is using an encoding of $\{11, 11, 10\}$ bits per 32-bit integer.  In our results, 8-bit quantization was sufficient for our lower-polygon models, and 10.66-bit provided sufficient quality for all models.  16-bit quantization may still prove useful in very polygon-dense models, or models with very extreme blendshape animation.  Additionally, even for models requiring only 10.66-bit quantization, 16-bit quantization provides an alternative that enables faster runtime reconstruction. 
+
+\begin{figure}
+    % TODO make better image
+    \includegraphics[width=\linewidth]{lossHistory.pdf}
+    \caption{Final loss depends on random seed initialization}
+    \label{fig:InitErrors}
+\end{figure}
+
+\subsection{Initialization of the optimizer}
+The results obtained with our method are somewhat dependent on random initialization (a trait shared with \csfb).  As can be seen in \Figure{fig:InitErrors}, 
+the difference in loss could be about 15\% between choosing good and poor random seeds.  We observed, however, that once started, the optimization trajectories for the best seeds, seem to be somewhat predictable after about 5\% of iterations.  Therefore, a practical approach to achieve near-optimal results is to run several hundred iterations with several seeds and select the best thus far to continue optimizing.  In practice, we use 20 random seeds running 5\% of iterations, and then run the best one to 100\%, reducing the runtime cost to a good solution by a factor of about 10x.
+
+\subsection{Runtime implementation} \label{sec:runtime}
+
+%\begin{figure*}[t]
+\begin{lrbox}{\codebox}
+\begin{lstlisting}[language=c++, basicstyle=\scriptsize]
+template <typename BlendShapeData, typename ValueType>
+void computeSparseFactorizationBlendshapes(
+    const BlendShapeData& data,
+    DeviceSpan<const Vec3>& staticMeshCoords,
+    DeviceSpan<Vec3>& outMeshCoords) {
+  constexpr bool isQuantized = !std::is_floating_point_v<ValueType>;
+  float bMult = data.bRange / std::numeric_limits<ValueType>::max();
+  float cMult = data.cRange / std::numeric_limits<ValueType>::max();
+
+  std::vector<float> matrixWB(data.numColumnB * 3lu, 0.f);
+  uint32_t flatBIndex = 0;
+  for (uint32_t bsIndex = 0; bsIndex < data.numBlendshapes; ++bsIndex) {
+    float bsWeight = data.blendshapeWeights[bsIndex];
+    for (uint32_t i = 0; i < 3; ++i) {
+      uint32_t numValuesRow = data.matrixBNumValuesRow[bsIndex * 3 + i];
+      for (uint32_t j = 0; j < numValuesRow; ++j) {
+        float bValue = isQuantized ?
+          data.bMin + bMult * data.matrixB[flatBIndex] : 
+          data.matrixB[flatBIndex];
+        uint32_t bCol = data.matrixBIndices[flatBIndex];
+        matrixWB[3 * bCol + i] += bValue * bsWeight;
+        flatBIndex++;
+      }
+    }
+  }
+ 
+  size_t numVertices = outMeshCoords.size();
+  uint32_t flatCIndex = 0;
+  for (uint32_t vIndex = 0; vIndex < numVertices; ++vIndex) {
+    Vec3 res(0.f);
+    uint_fast16_t numValuesCol = data.matrixCNumValuesCol[vIndex];
+    for (uint_fast16_t i = 0; i < numValuesCol; ++i) {
+      uint32_t cRow = data.matrixCIndices[flatCIndex + i];
+      float cValue = isQuantized ?
+        data.cMin + cMult * data.matrixC[flatCIndex + i] : 
+        data.matrixC[flatCIndex + i];
+      res.x += matrixWB[3 * cRow + 0] * cValue;
+      res.y += matrixWB[3 * cRow + 1] * cValue;
+      res.z += matrixWB[3 * cRow + 2] * cValue;
+    }
+    flatCIndex += data.matrixCNumValuesCol[vIndex];
+    outMeshCoords[vIndex] = staticMeshCoords[vIndex] + res;
+  }
+}
+\end{lstlisting}
+\end{lrbox}
+
+\begin{algorithm}
+\caption{CPU code to apply sparse matrix factorization-based blendshapes at runtime.}
+\label{alg:RuntimeCode}
+\usebox{\codebox}
+\end{algorithm}
+
+Calculation of the \Equation{eq:ShapeCalculation} with sparse representation of matrix $\matA$ requires two matrix multiplications and a vector addition:
+\[
+ \bSWeight \matB \matC + \restPose
+\]
+where $\bSWeight = (\identity \bSWeight_1, \dots, \identity \bSWeight_\numBS)$, $\identity$ is a $3\times3$ identity matrix and $\restPose\in\reals^{3\times\numVertices}$ are vertex positions of the rest pose. The result of the first calculation is a dense matrix $\bSWeight \matB\in\reals^{3\times\numColumnB}$. We allocate the column-major matrix $\matWB$ to hold $3\times\numColumnB$ float numbers and initialize it with zeros.
+%\BB{TODO, Roman, please fix?}
+\begin{comment}
+{\tiny
+\begin{equation}
+\begin{NiceArray}{ccccccccc}[cell-space-limits=2pt]
+                &                         &   &   &        &                     & \color{red} x   & \Block{7-2}<\Large>{B} & \hspace*{0.1cm}\\
+                &                         &   &   & w_0    & \times blendshape_0 & \color{green} y &                        & \hspace*{0.1cm}\\
+ \color{red}  x & \Block{3-1}<\Large>{wB} &   & + &        &                     & \color{blue} z  &                        & \hspace*{0.1cm}\\
+ \color{green}y &                         & = &   &        &                     & \color{red} x   &                        & \hspace*{0.1cm}\\
+ \color{blue} z & \hspace*{0.7cm}         &   &   & w_1    & \times blendshape_1 & \color{green} y & \hspace*{0.5cm}        & \hspace*{0.1cm}\\
+                &                         &   & + &        &                     & \color{blue} z  &                        & \hspace*{0.1cm}\\
+                &                         &   &   & \vdots &                     & \vdots          &                        & \hspace*{0.1cm}\\
+                &                         &   &   &        &                     &                 &                        & \hspace*{0.1cm}\\
+\CodeAfter
+\SubMatrix[{3-2}{5-2}]
+\SubMatrix[{1-5}{7-5}]
+\SubMatrix[{1-8}{7-9}]
+% \SubMatrix[{9-5}{11-6}]
+\emph{\SubMatrix{\{}{1-7}{3-7}{.}}
+\emph{\SubMatrix{\{}{4-7}{6-7}{.}}
+  % \tikz \draw [black] (8.5-|1) -- (8.5-|last) ;
+\end{NiceArray}
+\label{eq:wB}
+\end{equation}
+}
+\end{comment}
+To perform this multiplication efficiently we iterate over the array $\bSWeight$. For every non-zero weight value we need to iterate over 3 rows of the matrix $\matB$. If the matrix $\matB$ has non-zero values for a given weight, we perform multiplication and store the result in $\matWB$.
+The final step of the algorithm is to multiply the small dense matrix $\matWB$ with $\matC$. We iterate over the columns of the matrix $\matC$, and for every non-zero value we will read a column in matrix $\matWB$. We add the result of multiplication to the value from the rest pose and store the result. The CPU source code is available in \Algorithm{alg:RuntimeCode}.
+
+
+\begin{lrbox}{\codebox}
+\begin{lstlisting}[language=c++, basicstyle=\scriptsize]
+template <typename T>
+__global__ void computeWB(float* matrixWB, const float* weights,
+    const uint16_t* B_perValueLookupInfo, const T* matrixB, 
+    const uint8_t* matrixBIndices, float bMin, float bMult,
+    int32_t numColB, int32_t numBValues) {
+  constexpr bool isQuantized = !std::is_floating_point_v<T>;
+  int flatBIndex = blockIdx.x * blockDim.x + threadIdx.x;
+  if (flatBIndex >= numBValues) { return; }
+
+  uint16_t lookupVal = B_perValueLookupInfo[flatBIndex];
+  int bsIndex = lookupVal & 0x3fff;
+  int i = lookupVal >> 14;
+  float bsWeight = weights[bsIndex];
+
+  float bValue = isQuantized ? 
+    bMin + matrixB[flatBIndex] * bMult : 
+    matrixB[flatBIndex];
+  uint32_t bCol = matrixBIndices[flatBIndex];
+  atomicAdd(&(matrixWB[3 * bCol + i]), bValue * bsWeight);
+}
+
+template <typename T, typename OffT>
+__global__ void computeWBC(Vec3* outMeshCoords, 
+    const Vec3* staticMeshCoords, const float* matrixWB, 
+    const OffT* C_offsets, const uint8_t* matrixCIndices, 
+    const T* matrixC, float cMin, float cMult, int32_t numColB) {
+  constexpr bool isQuantized = !std::is_floating_point_v<T>;
+  int vIndex = blockIdx.x * blockDim.x + threadIdx.x;
+  if (vIndex >= outMeshCoords.size()) { return; }
+
+  Vec3 res(0.0f);
+  int nextIndex = C_offsets[vIndex + 1];
+  int flatCIndex = C_offsets[vIndex];
+  while(flatCIndex < nextIndex) {
+    uint32_t cRow = matrixCIndices[flatCIndex];
+    const float cValue = isQuantized ? 
+        cMin + matrixC[flatCIndex] * cMult : 
+        matrixC[flatCIndex];
+
+    res.x += matrixWB[3 * cRow + 0] * cValue;
+    res.y += matrixWB[3 * cRow + 1] * cValue;
+    res.z += matrixWB[3 * cRow + 2] * cValue;
+    ++flatCIndex;
+  }
+  outMeshCoords[vIndex] = staticMeshCoords[vIndex] + res;
+}
+
+\end{lstlisting}
+\end{lrbox}
+
+\begin{algorithm}
+\caption{CUDA code to apply sparse matrix factorization-based blendshapes at runtime.}
+\label{alg:CudaCode}
+\usebox{\codebox}
+\end{algorithm}
+
+Efficiently computing this reconstruction on the GPU requires some modification, including additional memory.  Notably, in order to compute $wB$, we precompute a per-nonzero-$\matB$-value lookup to see which blendshape weight to use, and whether the value corresponds to $x$, $y$, or $z$.  This data is packed into 16-bits per value in $\matB$, and allows us to compute $\matWB$ in parallel across non-zero $\matB$ values.  Additionally, in order to compute $\matWB \matC$, we precompute a 16- or 24-bit offset per vertex to assist with indexing into $\matC$ (with number of bits depending on how large $\matC$ is).  This enables us to run in parallel across vertices.  The kernel code is shown in \Algorithm{alg:CudaCode}.
