@@ -1,14 +1,12 @@
-\vspace{-1.5mm}
 \section{Results}\label{sec:results}
 Our results are captured on a Jetson Orin Nano 8GB, which provides a 6-core Arm Cortex-A78AE, a 1024 CUDA-core GPU, and 8 GB of  128-bit LPDDR5 RAM.   We run the Jetson in \SI{15}{\watt} mode. For our CPU results, we use only a single CPU core for runtime animation.  We demonstrate our technique with 6 blendshape datasets.  \Table{tab:FullResults} and \Figure{fig:Datasets} show our datasets.  Aura, Bowen, Jupiter, and Proteus are publicly available models \cite{kavan2024compressed}.  Louise is the Animatable Digital Double of Louise by Eisko© ( \href{http://www.eisko.com}{http://www.eisko.com} ).  We have also created a new face model, Carlos.
-In our experiments, we use traditional sparse blendshapes as a baseline.  As part of our preprocessing pipeline, deltas smaller than $10 \mu m$ in absolute value are clamped to zero. 
+In our experiments, we use traditional sparse blendshapes (where we store matrix $\matA$ using sparse format) as a baseline.  As part of our preprocessing pipeline, deltas smaller than $10 \mu m$ in absolute value are clamped to zero. 
 The vertex indices for the sparse blendshape representation are 32-bit integers, and each non-zero delta consists of three 32-bit floating point values.
 
-We compare our method against \csfb. For each dataset we use 400 bones, 8 weights per vertex, and 6000 non-zero values for transformations, except the Louise and Carlos datasets, where 20000 non-zero values were required for high-quality results. 
+We compare our method against \csfb. For each dataset we use 400 bones, 8 weights per vertex, and 6,000 non-zero values for transformations, except the Louise and Carlos datasets, where 20,000 non-zero values were required for high-quality results. 
 The chosen number of bones is higher than in \cite{kavan2024compressed} to allow \csfb better capture small details, while maintaining the same number of non-zeros for transformation matrices. This ensures a fair quality comparison with our matrix factorization methods.
 We first ran experiments to see the effect of applying our new loss function (\Eq{eq:NewLoss}) on \csfb.  We observed significant quality improvements in wrinkle areas  (see \Figure{fig:CSFBAura}) and slight improvements in metrics (see \Table{tab:FullResults}).  Having established that our new loss function produces better results, the remainder of comparisons against our sparse matrix factorization technique will be using \csfb with the new loss function.
 
-% choosing alpha
 \begin{figure}
     \includegraphics[width=\linewidth]{chooseAlpha.pdf}
     \caption{Choosing $\alpha$ (Bowen model).}
@@ -19,7 +17,7 @@ To demonstrate the synergistic effect of the new loss function with the wrinkles
 
 To measure the quality of optimization and to compare algorithms we use three metrics.  The first two are
 mean absolute error (MAE) and maximum absolute error (MXE), corresponding to $L^1$ and $L^\infty$ norms.
-MAE is the mean over all vertices of $|\matA - \matB\matC|$ and MXE $= max |\matA - \matB\matC|$ over all vertices.  The third metric attempts to measure noise introduced by optimization and quantization, and we use the average edge angular difference (EAD). This is calculated as the mean of $ | \beta_{A} - \beta_{BC} | $  over all edges, where $\beta$ represents the dihedral angle between an edge's adjacent faces.
+MAE is the mean over all vertices of $|\matA - \matB\matC|$ and $\mathrm{MXE} = \max{|\matA - \matB\matC|}$ over all vertices.  The third metric attempts to measure noise introduced by optimization and quantization, and we use the average edge angular difference (EAD). This is calculated as the mean of $ | \beta_{A} - \beta_{BC} | $  over all edges, where $\beta$ represents the dihedral angle between an edge's adjacent faces.
 
 To determine the optimal value of parameter $\alpha$, we conducted multiple optimization runs for all models and plotted the resulting curves for our metrics. Notably, all models exhibited a consistent behavior: as
 $\alpha$ increased, the noise metric improved rapidly, while the position metrics degraded almost linearly (see \Figure{fig:chooseAlpha}) For every model we choose the biggest $\alpha$ value that did not significantly degrade the position metrics.
