@@ -1,0 +1,151 @@
+\documentclass[acmtog,anonymous,review]{acmart}
+\acmSubmissionID{papers\_1532}
+
+\usepackage{booktabs} % For formal tables
+\usepackage{wrapfig}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{nicematrix} % to illustrate real-time
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{xspace}
+% \usepackage{cite}
+% \usepackage{amsmath}
+% \usepackage{amsfonts}
+\usepackage{siunitx}
+%\usepackage{hyperref}
+
+\graphicspath{ {./images/} {./generated/} }
+
+\lstset{language=C++,
+                basicstyle=\ttfamily,
+                keywordstyle=\color{blue}\ttfamily,
+                stringstyle=\color{red}\ttfamily,
+                commentstyle=\color{green}\ttfamily,
+                morecomment=[l][\color{magenta}]{\#}
+}
+\newsavebox{\codebox}
+% TOG prefers author-name bib system with square brackets
+\citestyle{acmauthoryear}
+%\setcitestyle{nosort,square} % nosort to allow for manual chronological ordering
+
+
+
+\usepackage[ruled]{algorithm2e} % For algorithms
+\renewcommand{\algorithmcfname}{ALGORITHM}
+\setlength{\algomargin}{0pt}
+\SetAlFnt{\small}
+\SetAlCapFnt{\small}
+%\SetAlCapNameFnt{\small}https://overleaf.thefacebook.com/project/6778e7795bc9a40e2bfdb80e
+\SetAlCapHSkip{0pt}
+
+% Metadata Information
+%\acmJournal{TOG}https://overleaf.thefacebook.com/project/6778e7795bc9a40e2bfdb80e
+
+
+\input{Commands.tex}
+
+% Document starts
+\begin{document}
+\setlength{\abovecaptionskip}{0.5ex}
+\setlength{\belowcaptionskip}{0.5ex}
+\setlength{\floatsep}{0.5ex}
+\setlength{\textfloatsep}{0.5ex}
+
+\title{QMF-Blend: Quantized Matrix Factorization for Efficient Blendshape Compression}
+
+\author{Roman Fedotov}
+\affiliation{%
+  \institution{Meta Reality Labs}
+  \country{USA}
+}
+\email{TODO}
+
+\author{Brian Budge}
+\affiliation{%
+  \institution{Meta Reality Labs}
+  \country{USA}
+}
+\email{bbudge@meta.com}
+
+\author{Ladislav Kavan}
+\affiliation{%
+  \institution{Meta Reality Labs}
+  \country{Switzerland}
+}
+\email{
+lkavan@meta.com}
+
+
+\begin{abstract}
+In this paper, we introduce a state-of-the-art blendshape compression algorithm that significantly reduces storage requirements and computational complexity in facial animation. Our approach leverages large sparse matrix factorization and quantization to compress high-dimensional blendshape coefficients into a compact representation, preserving essential features and high-frequency geometric details. The proposed algorithm outperforms existing methods in terms of compression ratio, reconstruction quality, and computational efficiency. We demonstrate its effectiveness through extensive experiments on various animated face models, achieving compression factors of up to 100$\times$ over sparse blendshapes with minimal impact on quality. Our technique offers compression rates up to 4.6$\times$ better than the prior state-of-the-art while also improving approximation error and preserving features like wrinkles. Additionally, our runtime computation is up to 3$\times$ faster than state-of-the-art on CPU and 70\% faster than state-of-the-art on GPU, facilitating high-quality facial animation on low-powered computing platforms with limited resources.
+\end{abstract}
+
+% previous version used to prompt Metamate:
+% In this paper, we present a novel state-of-the-art blendshape compression algorithm that significantly reduces the storage requirements and computational complexity of facial animation. Our approach leverages factorization of large sparse matrices and quantization to compress high-dimensional blendshape coefficients into a compact representation while preserving the essential features of the original data, especially high-frequency geometric details.  The proposed algorithm outperforms existing methods in terms of compression ratio, reconstruction quality, and computational efficiency. We demonstrate the effectiveness of our approach through extensive experiments on various animated face models, with compression factors well over 100x with minimal impact on quality. Our compression rates are about 4x better than the prior state-of-the-art while simultaneously also improving the approximation error. Our runtime computation is 2x to 3x faster and thus facilitates high quality facial animation especially on low-powered computing platforms with limited resources.
+
+\setcopyright{acmlicensed}
+
+\ccsdesc[500]{Computing methodologies~Animation}
+
+\keywords{facial animation, blendshapes, skinning decomposition}
+
+\begin{teaserfigure}
+    % \includegraphics[width=4.4cm]{example-image-a}
+    % \includegraphics[width=4.4cm]{example-image-a}
+    % \includegraphics[width=4.4cm]{example-image-a}
+    % \includegraphics[width=4.4cm]{example-image-a}
+    \hfill
+    \begin{minipage}[b]{3.5cm}
+         \includegraphics[width=3.5cm]{jupiterOrig_w.png}
+         \centering
+         \subcaption*{Sparse BS, 6.4 MB} %1e-3 -> 6.4 MB , 1e-4 -> 9.8
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{3.5cm}
+         \includegraphics[width=3.5cm]{jupiterDemB_w.png}
+         \centering
+         \subcaption*{Dem Bones, 1.6 MB}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{3.5cm}
+         \includegraphics[width=3.5cm]{jupiterSD0_w.png}
+         \centering
+         \subcaption*{\csfb, 302.3 KB}
+    \end{minipage}
+    \hfill
+    % \begin{minipage}[b]{3.5cm}
+    %      \includegraphics[width=3.5cm]{jupiterSD_w.png}
+    %      \centering
+    %      \subcaption{CSFB + our new norm }
+    % \end{minipage}
+    \begin{minipage}[b]{3.5cm}
+         \includegraphics[width=3.5cm]{jupiterSFQ_w.png}
+         \centering
+         \subcaption*{\qmf (Ours), 65.4 KB }
+    \end{minipage}
+    \hspace{1.5cm}
+    \caption{Comparison of blendshape compression algorithms (Jupiter model). Dem Bones (\cite{dembones}) and \csfb(\cite{kavan2024compressed}) do not preserve wrinkles.  Our method, \qmf, preserves wrinkles well, while also providing much higher compression ratio. }
+    \label{fig:Teaser}
+\end{teaserfigure}
+\maketitle
+
+
+\input{1_Introduction}
+\input{2_RelatedWork}
+\input{3_Method}
+\input{4_Results}
+\input{5_Conclusion}
+\begin{acks}
+
+\end{acks}
+% \clearpage
+\bibliographystyle{ACM-Reference-Format}
+
+\vspace{-1.5mm}
+\bibliography{reference}
+% \clearpage
+
+\input{Appendix}
+\end{document}

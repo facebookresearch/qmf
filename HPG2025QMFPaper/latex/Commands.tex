@@ -1,0 +1,166 @@
+% 
+\usepackage{xspace}
+\makeatletter
+\DeclareRobustCommand\onedot{\futurelet\@let@token\@onedot}
+\def\@onedot{\ifx\@let@token.\else.\null\fi\xspace}
+\def\eg{\emph{e.g}\onedot} \def\Eg{\emph{E.g}\onedot}
+\def\ie{\emph{i.e}\onedot} \def\Ie{\emph{I.e}\onedot}
+\def\cf{\emph{c.f}\onedot} \def\Cf{\emph{C.f}\onedot}
+\def\etc{\emph{etc}\onedot} \def\vs{\emph{vs}\onedot}
+\def\wrt{w.r.t\onedot} \def\dof{d.o.f\onedot}
+%\newcommand{\etal}{\emph{et al}\onedot}
+\def\etal{\emph{et al}\onedot}
+\makeatother
+
+\usepackage[makeroom]{cancel}
+
+
+\newcommand{\tderiv}[2]{\frac{d #1}{d #2}}
+\newcommand{\ttderiv}[2]{\frac{d^2 #1}{d #2^2}}
+\newcommand{\ttderivmixed}[3]{\frac{d^2 #1}{d #2 d #3}}
+\newcommand{\pderiv}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\ppderiv}[2]{\frac{\partial^2 #1}{\partial #2^2}}
+\newcommand{\ppderivmixed}[3]{\frac{\partial^2 #1}{\partial #2 \partial #3}}
+
+% references and abbreviations
+\newcommand{\refsec}[1]{Section~\ref{#1}}
+\newcommand{\Section}[1]{Section~\ref{#1}}
+\newcommand{\Sec}[1]{Sec.~\ref{#1}}
+\newcommand{\Eq}[1]{Eq.~(\ref{#1})}
+\newcommand{\Equation}[1]{Equation ~(\ref{#1})}
+\newcommand{\Fig}[1]{Fig.~\ref{#1}}
+\newcommand{\Figure}[1]{Figure~\ref{#1}}
+\newcommand{\Subfigure}[2]{Figure~\ref{#1}(\subref{#2})}
+\newcommand{\Subfig}[2]{Fig.~\ref{#1}(\subref{#2})}
+\newcommand{\Table}[1]{Table~\ref{#1}}
+\newcommand{\Appendix}[1]{Appendix~\ref{#1}}
+\newcommand{\Alg}[1]{Alg.~\ref{#1}}
+\newcommand{\Algorithm}[1]{Algorithm~\ref{#1}}
+
+
+\newcommand{\A}{{\mathsf{A}}}
+\newcommand{\dt}{{\Delta t}}
+\renewcommand{\P}{{\mathsf{P}}}
+\renewcommand{\u}{{\mathbf u}}
+\newcommand{\f}{{\mathbf f}}
+\newcommand{\bmu}{\boldsymbol{\mu}}
+\newcommand{\bSigma}{\boldsymbol{\Sigma}}
+\newcommand{\btheta}{\boldsymbol{\theta}}
+
+% bold
+\newcommand{\bA}{\mathbf{A}}
+\newcommand{\bB}{\mathbf{B}}
+\newcommand{\bC}{\mathbf{C}}
+\newcommand{\bD}{\mathbf{D}}
+\newcommand{\bE}{\mathbf{E}}
+\newcommand{\bF}{\mathbf{F}}
+\newcommand{\bG}{\mathbf{G}}
+\newcommand{\bH}{\mathbf{H}}
+\newcommand{\bI}{\mathbf{I}}
+\newcommand{\bJ}{\mathbf{J}}
+\newcommand{\bK}{\mathbf{K}}
+\newcommand{\bL}{\mathbf{L}}
+\newcommand{\bM}{\mathbf{M}}
+\newcommand{\bN}{\mathbf{N}}
+\newcommand{\bR}{\mathbf{R}}
+\newcommand{\bS}{\mathbf{S}}
+\newcommand{\bT}{\mathbf{T}}
+\newcommand{\bU}{\mathbf{U}}
+\newcommand{\bV}{\mathbf{V}}
+\newcommand{\bW}{\mathbf{W}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\ba}{\mathbf{a}}
+\newcommand{\bb}{\mathbf{b}}
+\newcommand{\bc}{\mathbf{c}}
+\newcommand{\bd}{\mathbf{d}}
+\newcommand{\be}{\mathbf{e}}
+\newcommand{\bff}{\mathbf{f}}
+\newcommand{\bg}{\mathbf{g}}
+\newcommand{\bj}{\mathbf{j}}
+\newcommand{\bk}{\mathbf{k}}
+\newcommand{\bm}{\mathbf{m}}
+\newcommand{\bn}{\mathbf{n}}
+\newcommand{\bp}{\mathbf{p}}
+\newcommand{\br}{\mathbf{r}}
+\newcommand{\bs}{\mathbf{s}}
+\newcommand{\bt}{\mathbf{t}}
+\newcommand{\bu}{\mathbf{u}}
+\newcommand{\bv}{\mathbf{v}}
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bl}{\mathbf{l}}
+\newcommand{\bq}{\mathbf{q}}
+\newcommand{\bw}{\mathbf{w}}
+\newcommand{\by}{\mathbf{y}}
+\newcommand{\bz}{\mathbf{z}}
+\newcommand{\bZero}{\mathbf{0}}
+\newcommand{\Lag}{\mathcal{L}}
+\newcommand{\tran}{\mathsf{T}}
+\newcommand{\dd}{\mathrm{d}}
+
+
+\newcommand{\tbx}{\tilde{\mathbf{x}}}
+
+% \newcommand{\Comment}[3]
+% {
+% \textcolor{#3}{#1: #2}
+% }
+
+\newcommand{\BT}[1]
+{
+\textcolor{teal}{BT: #1}
+}
+
+
+\newcommand{\revision}[1]
+{
+\textcolor{blue}{#1}
+}
+
+\newcommand{\TODO}[1]
+{
+\Comment{}{#1}{red}
+}
+
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+\newcommand*{\argminl}{\argmin\limits}
+\newcommand*{\argmaxl}{\argmax\limits}
+
+\newif\ifcomment
+%\commentfalse
+\commenttrue
+\newcommand{\LK}[1]{\ifcomment{\textcolor{orange}{(LK: #1)}}\else \fi}
+\newcommand{\BB}[1]{\ifcomment{\textcolor{red}{(BB: #1)}}\else \fi}
+\newcommand{\RF}[1]{\ifcomment{\textcolor{blue}{(RF: #1)}}\else \fi}
+
+% paper notations
+\newcommand{\numBS}{S} % F for frames
+\newcommand{\numVertices}{N}
+\newcommand{\numColumnB}{d}
+\newcommand{\matA}{\mathbf{A}}
+\newcommand{\approxMatA}{\mathbf{A'}}
+\newcommand{\matB}{\mathbf{B}}
+\newcommand{\matC}{\mathbf{C}}
+\newcommand{\matM}{\mathbf{M}}
+\newcommand{\vertexPos}{\mathbf{v}}
+\newcommand{\bSWeight}{\mathbf{w}}
+\newcommand{\numNonzeroBC}{K}
+\newcommand{\meanCurvature}{\mathbf{H}}
+\newcommand{\wrinklesMap}{\mathbf{D}}
+\newcommand{\wrinklesMult}{\gamma}
+\newcommand{\restPose}{\mathbf{R}}
+\newcommand{\identity}{\mathbf{I}}
+\newcommand{\matWB}{\mathbf{wB}}
+\newcommand{\getNumNz}{\operatorname{nnz}}
+\newcommand{\newNorm}{\eta}
+
+\newcommand{\Laplacian}{\mathbf{L}}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\code}[1]{\texttt{#1}} % for short inline code like '
+
+\newcommand{\csfb}{\texttt{CSFB}\xspace}
+\newcommand{\qmf}{\texttt{QMF}\xspace}
+\newcommand{\mf}{\texttt{MF}\xspace}
+
+%% EG style seems highly opposed to citet
+% \newcommand{\citet}[1]{\cite{#1}}
