@@ -174,61 +174,64 @@ the difference in loss could be about 15\% between choosing good and poor random
 
 \subsection{Runtime implementation} \label{sec:runtime}
 
-%\begin{figure*}[t]
-% \begin{lrbox}{\codebox}
-% \begin{lstlisting}[language=c++, basicstyle=\scriptsize]
-% template <typename BlendShapeData, typename ValueType>
-% void computeSparseFactorizationBlendshapes(
-%     const BlendShapeData& data,
-%     DeviceSpan<const Vec3>& staticMeshCoords,
-%     DeviceSpan<Vec3>& outMeshCoords) {
-%   constexpr bool isQuantized = !std::is_floating_point_v<ValueType>;
-%   float bMult = data.bRange / std::numeric_limits<ValueType>::max();
-%   float cMult = data.cRange / std::numeric_limits<ValueType>::max();
-%
-%   std::vector<float> matrixWB(data.numColumnB * 3lu, 0.f);
-%   uint32_t flatBIndex = 0;
-%   for (uint32_t bsIndex = 0; bsIndex < data.numBlendshapes; ++bsIndex) {
-%     float bsWeight = data.blendshapeWeights[bsIndex];
-%     for (uint32_t i = 0; i < 3; ++i) {
-%       uint32_t numValuesRow = data.matrixBNumValuesRow[bsIndex * 3 + i];
-%       for (uint32_t j = 0; j < numValuesRow; ++j) {
-%         float bValue = isQuantized ?
-%           data.bMin + bMult * data.matrixB[flatBIndex] : 
-%           data.matrixB[flatBIndex];
-%         uint32_t bCol = data.matrixBIndices[flatBIndex];
-%         matrixWB[3 * bCol + i] += bValue * bsWeight;
-%         flatBIndex++;
-%       }
-%     }
-%   }
-%  
-%   size_t numVertices = outMeshCoords.size();
-%   uint32_t flatCIndex = 0;
-%   for (uint32_t vIndex = 0; vIndex < numVertices; ++vIndex) {
-%     Vec3 res(0.f);
-%     uint_fast16_t numValuesCol = data.matrixCNumValuesCol[vIndex];
-%     for (uint_fast16_t i = 0; i < numValuesCol; ++i) {
-%       uint32_t cRow = data.matrixCIndices[flatCIndex + i];
-%       float cValue = isQuantized ?
-%         data.cMin + cMult * data.matrixC[flatCIndex + i] : 
-%         data.matrixC[flatCIndex + i];
-%       res.x += matrixWB[3 * cRow + 0] * cValue;
-%       res.y += matrixWB[3 * cRow + 1] * cValue;
-%       res.z += matrixWB[3 * cRow + 2] * cValue;
-%     }
-%     flatCIndex += data.matrixCNumValuesCol[vIndex];
-%     outMeshCoords[vIndex] = staticMeshCoords[vIndex] + res;
-%   }
-% }
-% \end{lstlisting}
-% \end{lrbox}
-%
-% \begin{algorithm}
-% \caption{CPU code to apply sparse matrix factorization-based blendshapes at runtime.}
-% \label{alg:RuntimeCode}
-% \usebox{\codebox}
-% \end{algorithm}
+\begin{comment}
+
+\begin{lrbox}{\codebox}
+\begin{lstlisting}[language=c++, basicstyle=\scriptsize]
+template <typename BlendShapeData, typename ValueType>
+void computeSparseFactorizationBlendshapes(
+    const BlendShapeData& data,
+    DeviceSpan<const Vec3>& staticMeshCoords,
+    DeviceSpan<Vec3>& outMeshCoords) {
+  constexpr bool isQuantized = !std::is_floating_point_v<ValueType>;
+  float bMult = data.bRange / std::numeric_limits<ValueType>::max();
+  float cMult = data.cRange / std::numeric_limits<ValueType>::max();
+
+  std::vector<float> matrixWB(data.numColumnB * 3lu, 0.f);
+  uint32_t flatBIndex = 0;
+  for (uint32_t bsIndex = 0; bsIndex < data.numBlendshapes; ++bsIndex) {
+    float bsWeight = data.blendshapeWeights[bsIndex];
+    for (uint32_t i = 0; i < 3; ++i) {
+      uint32_t numValuesRow = data.matrixBNumValuesRow[bsIndex * 3 + i];
+      for (uint32_t j = 0; j < numValuesRow; ++j) {
+        float bValue = isQuantized ?
+          data.bMin + bMult * data.matrixB[flatBIndex] : 
+          data.matrixB[flatBIndex];
+        uint32_t bCol = data.matrixBIndices[flatBIndex];
+        matrixWB[3 * bCol + i] += bValue * bsWeight;
+        flatBIndex++;
+      }
+    }
+  }
+ 
+  size_t numVertices = outMeshCoords.size();
+  uint32_t flatCIndex = 0;
+  for (uint32_t vIndex = 0; vIndex < numVertices; ++vIndex) {
+    Vec3 res(0.f);
+    uint_fast16_t numValuesCol = data.matrixCNumValuesCol[vIndex];
+    for (uint_fast16_t i = 0; i < numValuesCol; ++i) {
+      uint32_t cRow = data.matrixCIndices[flatCIndex + i];
+      float cValue = isQuantized ?
+        data.cMin + cMult * data.matrixC[flatCIndex + i] : 
+        data.matrixC[flatCIndex + i];
+      res.x += matrixWB[3 * cRow + 0] * cValue;
+      res.y += matrixWB[3 * cRow + 1] * cValue;
+      res.z += matrixWB[3 * cRow + 2] * cValue;
+    }
+    flatCIndex += data.matrixCNumValuesCol[vIndex];
+    outMeshCoords[vIndex] = staticMeshCoords[vIndex] + res;
+  }
+}
+\end{lstlisting}
+\end{lrbox}
+
+\begin{algorithm}
+\caption{CPU code to apply sparse matrix factorization-based blendshapes at runtime.}
+\label{alg:RuntimeCode}
+\usebox{\codebox}
+\end{algorithm}
+
+\end{comment}
 
 Calculation of the \Equation{eq:ShapeCalculation} with sparse representation of matrix $\matA$ requires two matrix multiplications and a vector addition:
 \[
