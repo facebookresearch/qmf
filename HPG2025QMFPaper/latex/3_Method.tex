@@ -40,21 +40,21 @@ To find solutions for \Equation{eq:Minimization} we use the Adam optimizer. Afte
 \subsection{Addressing missing wrinkles}\label{sec:newNorm}
 We found that both Dem Bones as well as \csfb lose wrinkles at medium to high compression rates (see \Figure{fig:Teaser}). This is because these previous works apply a Laplacian regularizer to ensure the approximation error is smooth:
 \begin{equation}
- \min_{\matB, \matC}( \|\matA - \matB \matC \| + \alpha \|\Laplacian \matB \matC\| ),
+ \min_{\matB, \matC}( \|\matA - \matB \matC \| + \alpha \|\Laplacian (\matB \matC)^\tran \| ),
  \label{eq:OldLoss}
 \end{equation}
 where $\Laplacian$ is the graph Laplacian.
 The Laplacian term penalizes large curvatures in $\matB \matC$ which leads to smooth error, but also smooths out the original signal, because the Laplacian is zero only for affine functions. This is especially problematic in areas where the original blendshapes $\matA$ have a large curvature, which is undesirably penalized by the regularization term, leading to over-smoothing of visually important details.
 
-To address these issues, we propose to replace the $\alpha \|\Laplacian \matB \matC\|$ with the following term: %loss that avoids the problems of the Laplacian regularizer: $\newNorm(\matA - \approxMatA)$, where 
+To address these issues, we propose to replace the $\alpha \|\Laplacian (\matB \matC)^\tran\|$ with the following term: %loss that avoids the problems of the Laplacian regularizer: $\newNorm(\matA - \approxMatA)$, where 
 \begin{equation}
-\alpha \|\Laplacian(\matA - \matB \matC ) \|.
+\alpha \|\Laplacian(\matA - \matB \matC )^\tran \|.
 %\newNorm(\matM) = \| \matM \| + \alpha\|\Laplacian\matM\|
 %\|\Laplacian(\approxMatA -\matA)\|
   \label{eq:NewLoss}
 \end{equation}
 %
-The seemingly minor change of applying the Laplacian to $\matA - \matB \matC$ means that the original blendshapes (i.e., the exact reconstruction: $\matA = \matB \matC$) would now receive zero regularization penalty -- even in high-curvature areas, avoiding the oversmoothing issues of the previous approach. We can say that \Equation{eq:OldLoss} makes a smooth mesh while \Equation{eq:NewLoss} makes a smooth error.
+The seemingly minor change of applying the Laplacian to $(\matA - \matB \matC)^\tran$ means that the original blendshapes (i.e., the exact reconstruction: $\matA = \matB \matC$) would now receive zero regularization penalty -- even in high-curvature areas, avoiding the oversmoothing issues of the previous approach. We can say that \Equation{eq:OldLoss} makes a smooth mesh while \Equation{eq:NewLoss} makes a smooth error.
 
 \begin{comment}
 We have incorporated a new norm $\newNorm$ into \csfb \LK{this may be better discussed in Results, here we should probably focus on our new method and not digress into the potential improvements of CSFB...}. This approach yields visual improvements in areas with wrinkles, as demonstrated in \Figure{fig:CSFBAura}. Moreover, our results show enhanced quality for the models, leading to overall better performance of the skinning decomposition.
