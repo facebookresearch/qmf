@@ -1,55 +1,69 @@
 
     \begin{table*}[t]
     \begin{center}
-    \begin{tabular}{ l  r r r r r r }
+    \begin{tabular}{l l  r r r r r r }
 \hline
-  & Aura & Jupiter & Bowen & Proteus & Louise & Carlos\\
+&  & Aura  & Jupiter & Bowen & Proteus & Louise & Carlos\\
 \hline
-num vertices & 5944 & 5944 & 23735 & 23735 & 20053 & 23735\\
-num BS & 267 & 319 & 253 & 287 & 253 & 287\\
-dense BS & 18.2 MB & 21.7 MB & 68.7 MB & 78.0 MB & 58.1 MB & 78.0 MB\\
-\multicolumn{6}{c}{\textbf{Sparse Blendshapes}}\\
-size & 6.4 MB & 6.4 MB & 24.4 MB & 25.0 MB & 24.7 MB & 25.0 MB\\
-CPU overhead & 0 B & 0 B & 0 B & 0 B & 0 B & 0 B\\
-GPU overhead & 1.6 MB & 1.6 MB & 6.1 MB & 6.2 MB & 6.2 MB & 6.2 MB\\
-CPU time & 211.0 $\mu$s & 217.0 $\mu$s & 925.6 $\mu$s & 915.5 $\mu$s & 797.4 $\mu$s & 3.0 ms\\
-GPU time (10) & 1.4 ms & 1.5 ms & 5.7 ms & 5.9 ms & 5.3 ms & 12.9 ms\\
-\multicolumn{6}{c}{\textbf{Skinning Decomposition (\csfb)}}\\
-MXE &   0.719 cm &   0.754 cm &   0.632 cm &   0.428 cm &   0.535 cm &   0.227 cm\\
-MAE & 0.00378 cm & 0.00277 cm & 0.00341 cm & 0.00295 cm & 0.00354 cm & 0.00147 cm\\
-EAD & 0.00502 rad & 0.00511 rad & 0.00395 rad & 0.00349 rad & 0.00601 rad & 0.00365 rad\\
-\multicolumn{6}{c}{\textbf{Skinning Decomposition (\csfb) + new loss}}\\
-size & 302.3 KB & 302.3 KB & 1.0 MB & 1.0 MB & 1017.9 KB & 1.1 MB\\
-CPU overhead & 9.4 KB & 9.4 KB & 9.4 KB & 9.4 KB & 9.4 KB & 9.4 KB\\
-GPU overhead & 9.4 KB & 9.4 KB & 9.4 KB & 9.4 KB & 9.4 KB & 9.4 KB\\
-CPU time & 282.1 $\mu$s & 282.0 $\mu$s & 1.1 ms & 1.1 ms & 943.5 $\mu$s & 1.1 ms\\
-GPU time (10) & 248.1 $\mu$s & 249.3 $\mu$s & 493.7 $\mu$s & 493.6 $\mu$s & 510.2 $\mu$s & 570.6 $\mu$s\\
-MXE &   0.408 cm &   0.325 cm &   0.499 cm &   0.377 cm &   0.588 cm &   0.187 cm\\
-MAE & 0.00356 cm & 0.00262 cm & 0.00335 cm & 0.00276 cm & 0.00348 cm & 0.00139 cm\\
-EAD & 0.00487 rad & 0.00488 rad & 0.00393 rad & 0.00344 rad & 0.00629 rad & 0.00365 rad\\
-\multicolumn{6}{c}{\textbf{Sparse Factorization (\mf)}}\\
-size & 177.5 KB & 153.3 KB & 561.1 KB & 561.2 KB & 655.1 KB & 707.6 KB\\
-CPU overhead & 2.3 KB & 2.3 KB & 2.3 KB & 2.3 KB & 2.3 KB & 2.3 KB\\
-GPU overhead & 43.1 KB & 42.2 KB & 93.3 KB & 89.6 KB & 109.8 KB & 110.7 KB\\
-CPU time & 94.1 $\mu$s & 84.8 $\mu$s & 378.2 $\mu$s & 383.3 $\mu$s & 373.5 $\mu$s & 447.1 $\mu$s\\
-GPU time (10) & 224.7 $\mu$s & 218.4 $\mu$s & 316.2 $\mu$s & 309.4 $\mu$s & 334.7 $\mu$s & 363.1 $\mu$s\\
-MXE &   0.386 cm &   0.339 cm &   0.327 cm &   0.196 cm &   0.292 cm &   0.153 cm\\
-MAE &  0.0033 cm &  0.0025 cm & 0.00243 cm & 0.00189 cm & 0.00297 cm & 0.00155 cm\\
-EAD & 0.00484 rad & 0.00486 rad &  0.0039 rad & 0.00335 rad & 0.00444 rad & 0.00318 rad\\
-\multicolumn{6}{c}{\textbf{Quantized Sparse Factorization  (\qmf) small}}\\
-size & 75.0 KB & 65.4 KB & 274.6 KB & 274.7 KB & 316.6 KB & 343.1 KB\\
-CPU time & 104.8 $\mu$s & 88.9 $\mu$s & 541.3 $\mu$s & 550.7 $\mu$s & 566.8 $\mu$s & 681.8 $\mu$s\\
-GPU time (10) & 207.9 $\mu$s & 206.9 $\mu$s & 349.2 $\mu$s & 347.1 $\mu$s & 355.6 $\mu$s & 395.5 $\mu$s\\
-MXE &   0.386 cm &   0.341 cm &   0.327 cm &   0.196 cm &   0.292 cm &   0.153 cm\\
-MAE & 0.00333 cm & 0.00252 cm & 0.00243 cm & 0.00189 cm & 0.00297 cm & 0.00155 cm\\
-EAD &  0.0053 rad & 0.00518 rad & 0.00398 rad & 0.00337 rad & 0.00453 rad & 0.00319 rad\\
-\multicolumn{6}{c}{\textbf{Quantized Sparse Factorization  (\qmf) fast}}\\
-size & 75.0 KB & 65.4 KB & 346.2 KB & 346.3 KB & 401.2 KB & 434.2 KB\\
-CPU time & 104.8 $\mu$s & 88.9 $\mu$s & 415.8 $\mu$s & 423.0 $\mu$s & 421.9 $\mu$s & 500.9 $\mu$s\\
-GPU time (10) & 207.9 $\mu$s & 206.9 $\mu$s & 294.2 $\mu$s & 292.9 $\mu$s & 305.8 $\mu$s & 332.5 $\mu$s\\
-MXE &   0.386 cm &   0.341 cm &   0.327 cm &   0.196 cm &   0.292 cm &   0.153 cm\\
-MAE & 0.00333 cm & 0.00252 cm & 0.00243 cm & 0.00189 cm & 0.00297 cm & 0.00155 cm\\
-EAD &  0.0053 rad & 0.00518 rad &  0.0039 rad & 0.00335 rad & 0.00444 rad & 0.00318 rad\\
+\multirow[m]{3}{*}{\parbox{3cm}{Model Parameters}}
+& num vertices & 5944 & 5944 & 23735 & 23735 & 20053 & 23735\\
+& num BS & 267 & 319 & 253 & 287 & 253 & 287\\
+& dense BS & 18.2 MB & 21.7 MB & 68.7 MB & 78.0 MB & 58.1 MB & 78.0 MB\\
+% \multicolumn{7}{c}{\textbf{Sparse Blendshapes}}\\
+% \multirow{4}{*}{\rotatebox{90}{\textbf{Sparse Blendshapes}}}
+\hline
+\multirow[m]{4}{*}{\parbox{3cm}{Sparse Blendshapes}}
+& size & 6.4 MB & 6.4 MB & 24.4 MB & 25.0 MB & 24.7 MB & 25.0 MB\\
+& CPU overhead & 0 B & 0 B & 0 B & 0 B & 0 B & 0 B\\
+& GPU overhead & 1.6 MB & 1.6 MB & 6.1 MB & 6.2 MB & 6.2 MB & 6.2 MB\\
+& CPU time & 211.0 $\mu$s & 217.0 $\mu$s & 925.6 $\mu$s & 915.5 $\mu$s & 797.4 $\mu$s & 3.0 ms\\
+& GPU time (10) & 1.4 ms & 1.5 ms & 5.7 ms & 5.9 ms & 5.3 ms & 12.9 ms\\
+% \multicolumn{7}{c}{\textbf{Skinning Decomposition (\csfb)}}\\
+\hline
+\multirow[m]{3}{*}{\parbox{3cm}{Skinning\\ Decomposition (\csfb)}}
+& MXE &   0.719 cm &   0.754 cm &   0.632 cm &   0.428 cm &   0.535 cm &   0.227 cm\\
+& MAE & 0.00378 cm & 0.00277 cm & 0.00341 cm & 0.00295 cm & 0.00354 cm & 0.00147 cm\\
+& EAD & 0.00502 rad & 0.00511 rad & 0.00395 rad & 0.00349 rad & 0.00601 rad & 0.00365 rad\\
+% \multicolumn{7}{c}{\textbf{Skinning Decomposition (\csfb) + new loss}}\\
+\hline
+\multirow[m]{8}{*}{\parbox{3cm}{Skinning\\ Decomposition (\csfb)\\ + new loss}}
+& size & 302.3 KB & 302.3 KB & 1.0 MB & 1.0 MB & 1017.9 KB & 1.1 MB\\
+& CPU overhead & 9.4 KB & 9.4 KB & 9.4 KB & 9.4 KB & 9.4 KB & 9.4 KB\\
+& GPU overhead & 9.4 KB & 9.4 KB & 9.4 KB & 9.4 KB & 9.4 KB & 9.4 KB\\
+& CPU time & 282.1 $\mu$s & 282.0 $\mu$s & 1.1 ms & 1.1 ms & 943.5 $\mu$s & 1.1 ms\\
+& GPU time (10) & 248.1 $\mu$s & 249.3 $\mu$s & 493.7 $\mu$s & 493.6 $\mu$s & 510.2 $\mu$s & 570.6 $\mu$s\\
+& MXE &   0.408 cm &   0.325 cm &   0.499 cm &   0.377 cm &   0.588 cm &   0.187 cm\\
+& MAE & 0.00356 cm & 0.00262 cm & 0.00335 cm & 0.00276 cm & 0.00348 cm & 0.00139 cm\\
+& EAD & 0.00487 rad & 0.00488 rad & 0.00393 rad & 0.00344 rad & 0.00629 rad & 0.00365 rad\\
+% \multicolumn{7}{c}{\textbf{Sparse Factorization (\mf)}}\\
+\hline
+\multirow[m]{8}{*}{\parbox{3cm}{Sparse\\ Factorization (\mf)}}
+& size & 177.5 KB & 153.3 KB & 561.1 KB & 561.2 KB & 655.1 KB & 707.6 KB\\
+& CPU overhead & 2.3 KB & 2.3 KB & 2.3 KB & 2.3 KB & 2.3 KB & 2.3 KB\\
+& GPU overhead & 43.1 KB & 42.2 KB & 93.3 KB & 89.6 KB & 109.8 KB & 110.7 KB\\
+& CPU time & 94.1 $\mu$s & 84.8 $\mu$s & 378.2 $\mu$s & 383.3 $\mu$s & 373.5 $\mu$s & 447.1 $\mu$s\\
+& GPU time (10) & 224.7 $\mu$s & 218.4 $\mu$s & 316.2 $\mu$s & 309.4 $\mu$s & 334.7 $\mu$s & 363.1 $\mu$s\\
+& MXE &   0.386 cm &   0.339 cm &   0.327 cm &   0.196 cm &   0.292 cm &   0.153 cm\\
+& MAE &  0.0033 cm &  0.0025 cm & 0.00243 cm & 0.00189 cm & 0.00297 cm & 0.00155 cm\\
+& EAD & 0.00484 rad & 0.00486 rad &  0.0039 rad & 0.00335 rad & 0.00444 rad & 0.00318 rad\\
+% \multicolumn{7}{c}{\textbf{Quantized Sparse Factorization  (\qmf) small}}\\
+\hline
+\multirow[m]{6}{*}{\parbox{3cm}{Quantized Sparse\\ Factorization (\qmf)\\ small}}
+& size & 75.0 KB & 65.4 KB & 274.6 KB & 274.7 KB & 316.6 KB & 343.1 KB\\
+& CPU time & 104.8 $\mu$s & 88.9 $\mu$s & 541.3 $\mu$s & 550.7 $\mu$s & 566.8 $\mu$s & 681.8 $\mu$s\\
+& GPU time (10) & 207.9 $\mu$s & 206.9 $\mu$s & 349.2 $\mu$s & 347.1 $\mu$s & 355.6 $\mu$s & 395.5 $\mu$s\\
+& MXE &   0.386 cm &   0.341 cm &   0.327 cm &   0.196 cm &   0.292 cm &   0.153 cm\\
+& MAE & 0.00333 cm & 0.00252 cm & 0.00243 cm & 0.00189 cm & 0.00297 cm & 0.00155 cm\\
+& EAD &  0.0053 rad & 0.00518 rad & 0.00398 rad & 0.00337 rad & 0.00453 rad & 0.00319 rad\\
+% \multicolumn{7}{c}{\textbf{Quantized Sparse Factorization  (\qmf) fast}}\\
+\hline
+\multirow[m]{6}{*}{\parbox{3cm}{Quantized Sparse\\ Factorization  (\qmf)\\ fast}}
+& size & 75.0 KB & 65.4 KB & 346.2 KB & 346.3 KB & 401.2 KB & 434.2 KB\\
+& CPU time & 104.8 $\mu$s & 88.9 $\mu$s & 415.8 $\mu$s & 423.0 $\mu$s & 421.9 $\mu$s & 500.9 $\mu$s\\
+& GPU time (10) & 207.9 $\mu$s & 206.9 $\mu$s & 294.2 $\mu$s & 292.9 $\mu$s & 305.8 $\mu$s & 332.5 $\mu$s\\
+& MXE &   0.386 cm &   0.341 cm &   0.327 cm &   0.196 cm &   0.292 cm &   0.153 cm\\
+& MAE & 0.00333 cm & 0.00252 cm & 0.00243 cm & 0.00189 cm & 0.00297 cm & 0.00155 cm\\
+& EAD &  0.0053 rad & 0.00518 rad &  0.0039 rad & 0.00335 rad & 0.00444 rad & 0.00318 rad\\
 
       \hline
       \end{tabular}
