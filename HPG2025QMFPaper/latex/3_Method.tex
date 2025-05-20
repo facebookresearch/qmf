@@ -35,7 +35,7 @@ subject to the sparsity constraints on $\matB$ and $\matC$.
 %---
 %Our loss function primarily utilizes the standard Euclidean norm, corresponding to $p=2$\LK{this should be discussed earlier, right after the minimization problem equation}, which eliminates the need to calculate absolute values in \Equation{eq:Minimization}. To ensure a smooth approximation, we employed our improved loss function (\Eq{eq:NewLoss}).
 
-To find solutions for \Equation{eq:Minimization} we use the Adam optimizer. After each Adam iteration, we perform projection to the desired number of nonzeros, ensuring the sparsity of both matrices $\matB$ and $\matC$. These projections do not participate in automatic differentiation.
+To find solutions for \Equation{eq:Minimization}, we adopt the approach from \cite{kavan2024compressed}, which combines the Adam optimizer with a projection step to enforce sparsity of both matrices $\matB$ and $\matC$. These projections do not participate in automatic differentiation.
 %, just like with general proximal algorithms \cite{parikh2014proximal}. In our case, 
 Each projection consists of retaining only $\numNonzeroBC$ total number of non-zero values across both matrices $\matB$ and $\matC$. We tried other projection strategies, such as setting separate limits for the numbers of non-zero values for each matrix $\matB$ and $\matC$. However, simply retaining the $\numNonzeroBC$ largest numbers across both of the matrices gives the optimizer the most flexibility and yields the best results. Our method can allocate the non-zero values better than skinning decomposition methods; areas with more complex deformation receive a higher number of non-zero values.
 
@@ -91,7 +91,7 @@ We have incorporated a new norm $\newNorm$ into \csfb \LK{this may be better dis
 
 \subsubsection{Further wrinkle improvements for sparse matrix factorization}
 While our new regularization term helps preserve the geometric error, high compression rates still lead to some degradation and over-smoothing. In this section we describe an additional technique we used to even better preserve the shape of high-frequency details like wrinkles.
-Unlike skinning decompositions methods, which use a fixed number of weights per vertex, sparse matrix factorization enables non-zero values to appear in the matrix where they will have the most impact to reduce overall loss (\Subfig{fig:FloatsDistribution}{nonZeroDistribution}). However, we found that it is beneficial to explicitly enforce more non-zeros and hence higher accuracy in high-curvature areas.
+Unlike skinning decompositions methods such as \csfb, which use a fixed number of weights per vertex, sparse matrix factorization enables non-zero values to appear in the matrix where they will have the most impact to reduce overall loss (\Subfig{fig:FloatsDistribution}{nonZeroDistribution}). However, we found that it is beneficial to explicitly enforce more non-zeros and hence higher accuracy in high-curvature areas.
 Our initial hypothesis was that the optimization process would smooth out all deformations with high mean curvature; however, this proved to be incorrect. Instead, we found that the lack of detail preservation arose in areas where changes in mean curvature occurred only \emph{across a limited number of blendshapes} because the blendshapes themselves are used when calculating loss, and values appearing in few blendshapes will have less contribution in the loss (see \Figure{fig:QMFNewNormAndWrinkles}). In such cases the optimizer reduced the number of non-zero values per vertex making it impossible to reconstruct high curvature deformations. 
 %-------
 To identify these areas, we analyze the changes in mean curvature across all blendshapes.
@@ -237,7 +237,7 @@ void computeSparseFactorizationBlendshapes(
 
 Calculation of the \Equation{eq:ShapeCalculation} with sparse representation of matrix $\matA$ requires two matrix multiplications and a vector addition:
 \[
- \bSWeight \matB \matC + \restPose
+ \bSWeight \matB \matC + \restPose,
 \]
 where $\bSWeight = (\identity \bSWeight_1, \dots, \identity \bSWeight_\numBS)$, $\identity$ is a $3\times3$ identity matrix and $\restPose\in\reals^{3\times\numVertices}$ are vertex positions of the rest pose. The result of the first calculation is a dense matrix $\bSWeight \matB\in\reals^{3\times\numColumnB}$. We allocate the column-major matrix $\matWB$ to hold $3\times\numColumnB$ float numbers and initialize it with zeros.
 %\BB{TODO, Roman, please fix?}
@@ -272,7 +272,7 @@ The final step of the algorithm is to multiply the small dense matrix $\matWB$ w
 
 
 \begin{lrbox}{\codebox}
-\begin{lstlisting}[language=c++, basicstyle=\scriptsize]
+\begin{lstlisting}[language=c++]
 template <typename T>
 __global__ void computeWB(float* matrixWB, const float* weights,
     const uint16_t* B_perValueLookupInfo, const T* matrixB, 
