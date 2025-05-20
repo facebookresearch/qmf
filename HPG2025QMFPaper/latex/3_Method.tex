@@ -40,7 +40,7 @@ To find solutions for \Equation{eq:Minimization}, we adopt the approach from \ci
 Each projection consists of retaining only $\numNonzeroBC$ total number of non-zero values across both matrices $\matB$ and $\matC$. We tried other projection strategies, such as setting separate limits for the numbers of non-zero values for each matrix $\matB$ and $\matC$. However, simply retaining the $\numNonzeroBC$ largest numbers across both of the matrices gives the optimizer the most flexibility and yields the best results. Our method can allocate the non-zero values better than skinning decomposition methods; areas with more complex deformation receive a higher number of non-zero values.
 
 \subsection{Addressing missing wrinkles}\label{sec:newNorm}
-We found that both Dem Bones as well as \csfb lose wrinkles at medium to high compression rates (see \Figure{fig:Teaser}). This is because these previous works apply a Laplacian regularizer to ensure the approximation error is smooth:
+We found that both Dem Bones and \csfb lose wrinkles at medium to high compression rates (see \Figure{fig:Teaser}). This is because these previous works apply a Laplacian regularizer to ensure the approximation error is smooth:
 \begin{equation}
  \min_{\matB, \matC}( \|\matA - \matB \matC \| + \alpha \|\Laplacian (\matB \matC)^\tran \| ),
  \label{eq:OldLoss}
@@ -56,7 +56,7 @@ To address these issues, we propose to replace the $\alpha \|\Laplacian (\matB \
   \label{eq:NewLoss}
 \end{equation}
 %
-The seemingly minor change of applying the Laplacian to $(\matA - \matB \matC)^\tran$ means that the original blendshapes (i.e., the exact reconstruction: $\matA = \matB \matC$) would now receive zero regularization penalty -- even in high-curvature areas, avoiding the oversmoothing issues of the previous approach. We can say that \Equation{eq:OldLoss} makes a smooth mesh while \Equation{eq:NewLoss} makes a smooth error.
+The seemingly minor change of applying the Laplacian to $(\matA - \matB \matC)^\tran$ means that the original blendshapes (i.e., the exact reconstruction: $\matA = \matB \matC$) would now receive zero regularization penalty -- even in high-curvature areas, avoiding the oversmoothing issues of the previous approach. We can say that \Equation{eq:OldLoss} makes a \emph{smooth mesh} while \Equation{eq:NewLoss} makes a \emph{smooth error}.
 
 \begin{comment}
 We have incorporated a new norm $\newNorm$ into \csfb \LK{this may be better discussed in Results, here we should probably focus on our new method and not digress into the potential improvements of CSFB...}. This approach yields visual improvements in areas with wrinkles, as demonstrated in \Figure{fig:CSFBAura}. Moreover, our results show enhanced quality for the models, leading to overall better performance of the skinning decomposition.
@@ -329,4 +329,4 @@ __global__ void computeWBC(Vec3* outMeshCoords,
 \usebox{\codebox}
 \end{algorithm}
 
-Efficiently computing this reconstruction on the GPU requires some modification, including additional memory.  Notably, in order to compute $wB$, we precompute a per-nonzero-$\matB$-value lookup to see which blendshape weight to use, and whether the value corresponds to $x$, $y$, or $z$.  This data is packed into 16-bits per value in $\matB$, and allows us to compute $\matWB$ in parallel across non-zero $\matB$ values.  Additionally, in order to compute $\matWB \matC$, we precompute a 16- or 24-bit offset per vertex to assist with indexing into $\matC$ (with number of bits depending on how large $\matC$ is).  This enables us to run in parallel across vertices. \Algorithm{alg:CudaCode} shows the our kernel code.
+Efficiently computing this reconstruction on the GPU requires some modification, including additional memory.  Notably, in order to compute $\matWB$, we precompute a per-nonzero-$\matB$-value lookup to see which blendshape weight to use, and whether the value corresponds to $x$, $y$, or $z$.  This data is packed into 16-bits per value in $\matB$, and allows us to compute $\matWB$ in parallel across non-zero $\matB$ values.  Additionally, in order to compute $\matWB \matC$, we precompute a 16- or 24-bit offset per vertex to assist with indexing into $\matC$ (with number of bits depending on how large $\matC$ is).  This enables us to run in parallel across vertices. \Algorithm{alg:CudaCode} shows the our kernel code.  We note that atomic addition in the $\matWB$ calculation does lead to some nondeterminism, but in practice errors are in the range of nanometers.
