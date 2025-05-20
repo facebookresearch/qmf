@@ -46,20 +46,6 @@ When evaluating on the GPU, we noted that a common scenario would be to animate 
 
 Detailed results for all experiments are shown in \Table{tab:FullResults}.   Full optimization code for our method will be released open source concurrent to the conference. 
 
-
-\begin{figure}
-    \includegraphics[width=\linewidth]{durationDiagramCPU.pdf}
-    \caption{CPU: Average facial expression calculation wall time}
-    \label{fig:RuntimeCost}
-\end{figure}
-
-\begin{figure}
-    \includegraphics[width=\linewidth]{durationDiagramCUDA.pdf}
-    \caption{GPU: Average wall time for 10 concurrent facial expression calculations}
-    \label{fig:RuntimeCostGPU}
-\end{figure}
-
-
 \input{generated/bigTable.tex}
 
 %--
@@ -76,13 +62,6 @@ Detailed results for all experiments are shown in \Table{tab:FullResults}.   Ful
     \vspace{1em}
     \caption{\csfb results left to right: sparse blendshapes, old loss, new loss }
     \label{fig:CSFBAura}
-\end{figure}
-
-
-\begin{figure}
-    \includegraphics[width=\linewidth]{compressionRatesDiagram.pdf}
-    \caption{Compression Rates relative to sparse blendshapes size}
-    \label{fig:Compression}
 \end{figure}
 
 

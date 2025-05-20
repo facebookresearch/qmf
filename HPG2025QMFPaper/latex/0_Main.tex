@@ -13,11 +13,7 @@
 \usepackage{hyperref}
 \usepackage{xspace}
 \usepackage{multirow}
-% \usepackage{cite}
-% \usepackage{amsmath}
-% \usepackage{amsfonts}
 \usepackage{siunitx}
-%\usepackage{hyperref}
 
 \graphicspath{ {./images/} {./generated/} }
 
@@ -101,19 +97,19 @@ In this paper, we introduce a state-of-the-art blendshape compression algorithm 
     % \includegraphics[width=4.4cm]{example-image-a}
     \hfill
     \begin{minipage}[b]{3.5cm}
-         \includegraphics[width=3.5cm]{jupiterOrig_w.png}
+         \includegraphics[width=3.5cm, trim={0cm 5.5cm 0cm 4cm},clip]{jupiterOrig_w.png}
          \centering
          \subcaption*{Sparse BS, 6.4 MB} %1e-3 -> 6.4 MB , 1e-4 -> 9.8
     \end{minipage}
     \hfill
     \begin{minipage}[b]{3.5cm}
-         \includegraphics[width=3.5cm]{jupiterDemB_w.png}
+         \includegraphics[width=3.5cm, trim={0cm 5.5cm 0cm 4cm},clip]{jupiterDemB_w.png}
          \centering
          \subcaption*{Dem Bones, 1.6 MB}
     \end{minipage}
     \hfill
     \begin{minipage}[b]{3.5cm}
-         \includegraphics[width=3.5cm]{jupiterSD0_w.png}
+         \includegraphics[width=3.5cm, trim={0cm 5.5cm 0cm 4cm},clip]{jupiterSD0_w.png}
          \centering
          \subcaption*{\csfb, 302.3 KB}
     \end{minipage}
@@ -124,7 +120,7 @@ In this paper, we introduce a state-of-the-art blendshape compression algorithm 
     %      \subcaption{CSFB + our new norm }
     % \end{minipage}
     \begin{minipage}[b]{3.5cm}
-         \includegraphics[width=3.5cm]{jupiterSFQ_w.png}
+         \includegraphics[width=3.5cm, trim={0cm 5.5cm 0cm 4cm},clip]{jupiterSFQ_w.png}
          \centering
          \subcaption*{\qmf (Ours), 65.4 KB }
     \end{minipage}
