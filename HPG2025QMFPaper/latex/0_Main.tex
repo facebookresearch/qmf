@@ -1,13 +1,9 @@
 \documentclass[acmtog,anonymous,review]{acmart}
-% \acmSubmissionID{papers\_1532}
 \acmSubmissionID{papers\_1996s1}
 
-
-\usepackage{booktabs} % For formal tables
 \usepackage{wrapfig}
 \usepackage{listings}
 \usepackage{tikz}
-\usepackage{nicematrix} % to illustrate real-time
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{hyperref}
@@ -27,9 +23,6 @@
 \newsavebox{\codebox}
 % TOG prefers author-name bib system with square brackets
 \citestyle{acmauthoryear}
-%\setcitestyle{nosort,square} % nosort to allow for manual chronological ordering
-
-
 
 \usepackage[ruled]{algorithm2e} % For algorithms
 \renewcommand{\algorithmcfname}{ALGORITHM}
@@ -42,12 +35,7 @@
 % Metadata Information
 %\acmJournal{TOG}https://overleaf.thefacebook.com/project/6778e7795bc9a40e2bfdb80e
 
-
 \input{Commands.tex}
-% \lstdefinestyle{mystyle}{
-%     basicstyle=\ttfamily\scriptsize,
-% }
-% \lstset{style=mystyle}
 
 % Document starts
 \begin{document}
@@ -61,9 +49,9 @@
 \author{Roman Fedotov}
 \affiliation{%
   \institution{Meta Reality Labs}
-  \country{USA}
+  \country{Australia}
 }
-\email{TODO}
+\email{fedotov.roman@gmail.com}
 
 \author{Brian Budge}
 \affiliation{%
@@ -92,13 +80,9 @@ In this paper, we introduce a state-of-the-art blendshape compression algorithm 
 
 \ccsdesc[500]{Computing methodologies~Animation}
 
-\keywords{facial animation, blendshapes, skinning decomposition}
+\keywords{facial animation, blendshapes, compression}
 
 \begin{teaserfigure}
-    % \includegraphics[width=4.4cm]{example-image-a}
-    % \includegraphics[width=4.4cm]{example-image-a}
-    % \includegraphics[width=4.4cm]{example-image-a}
-    % \includegraphics[width=4.4cm]{example-image-a}
     \hfill
     \begin{minipage}[b]{3.5cm}
          \includegraphics[width=3.5cm, trim={0cm 5.5cm 0cm 4cm},clip]{jupiterOrig_w.png}
@@ -146,7 +130,6 @@ In this paper, we introduce a state-of-the-art blendshape compression algorithm 
 % \clearpage
 \bibliographystyle{ACM-Reference-Format}
 
-\vspace{-1.5mm}
 \bibliography{reference}
 % \clearpage
 
