@@ -126,9 +126,9 @@ The calculation of the matrix $\wrinklesMap$ occurs once prior to the optimizati
 To efficiently encode indices for the sparse matrices $\matB$ and $\matC$, we utilize a modified compressed sparse row (CSR) format for matrix $\matB$ and a compressed sparse column (CSC) format for matrix $\matC$.   
 These choices are determined by the order of matrix multiplication at runtime. Specifically, for matrix $\matB$, we need to compute a weighted sum of its rows. In contrast, matrix $\matC$ serves as the second operand in the matrix multiplication, so we must access its elements column-wise (see \Section{sec:runtime}).
 
-Experimental results indicate that  $\numColumnB = 200$ (columns of $\matB$ and rows of $\matC$) is sufficient to achieve low errors. Because $\numColumnB \le 255$, we use an 8-bit representation to encode the column index for matrix $\matB$ and the row index for matrix $\matC$. Instead of storing an array of offsets, we store the number of non-zero values per row in matrix $\matB$ or per column in matrix $\matC$ and calculate offsets in order to calculate the next dot product during matrix multiplication. 
+Experimental results indicate that  $\numColumnB = 200$ (columns of $\matB$ and rows of $\matC$) is sufficient to achieve low errors. Because $\numColumnB \le 255$, we use an 8-bit representation to encode the column index for matrix $\matB$ and the row index for matrix $\matC$. Instead of storing an array of offsets, we store the number of non-zero values per row in matrix $\matB$ or per column in matrix $\matC$ and compute offsets in order to calculate the next dot product during matrix multiplication. 
 %For example, see how \texttt{numValuesRow} is used in \Algorithm{alg:RuntimeCode}. 
-Consequently, for indexing both matrices, we need to store $\numVertices + 3\numBS + \numNonzeroBC$ bytes for $\numVertices$ vertices, $\numBS$ blendshapes, and $\numNonzeroBC$ non-zero values.
+Consequently, to index both matrices, we need to store $\numVertices + 3\numBS$ bytes for $\numVertices$ vertices and  $\numBS$ blendshapes.
 %
 %--- Quantization
 \begin{figure}
@@ -235,7 +235,7 @@ void computeSparseFactorizationBlendshapes(
 
 \end{comment}
 
-Calculation of the \Equation{eq:ShapeCalculation} with sparse representation of matrix $\matA$ requires two matrix multiplications and a vector addition:
+Calculation of  \Equation{eq:ShapeCalculation} with sparse representation of matrix $\matA$ requires two matrix multiplications and a vector addition:
 \[
  \bSWeight \matB \matC + \restPose,
 \]
@@ -266,7 +266,7 @@ where $\bSWeight = (\identity \bSWeight_1, \dots, \identity \bSWeight_\numBS)$, 
 \end{equation}
 }
 \end{comment}
-To perform this multiplication efficiently we iterate over the array $\bSWeight$. For every non-zero weight value we need to iterate over 3 rows of the matrix $\matB$. If the matrix $\matB$ has non-zero values for a given weight, we perform multiplication and store the result in $\matWB$.
+To perform this multiplication efficiently we iterate over the array $\bSWeight$. For every non-zero weight value we need to iterate over 3 rows of the matrix $\matB$. If $\matB$ has non-zero values for a given weight, we perform multiplication and store the result in $\matWB$.
 The final step of the algorithm is to multiply the small dense matrix $\matWB$ with $\matC$. We iterate over the columns of the matrix $\matC$, and for every non-zero value we will read a column in matrix $\matWB$. We add the result of multiplication to the value from the rest pose and store the result. 
 %The CPU source code is available in \Algorithm{alg:RuntimeCode}.
 
