@@ -52,9 +52,8 @@
 \title{Supplemental Material for QMF-Blend: Quantized Matrix Factorization for Efficient Blendshape Compression}
 
 \maketitle
-\section{Supplemental Material}
-
-
+% \section{Supplemental Material}
+\vspace{4mm}
 \subsection*{CPU Runtime Code}
 This supplementary material provides the CPU implementation for applying blendshapes at runtime using sparse matrix factorization.
 
@@ -83,7 +82,7 @@ void computeSparseFactorizationBlendshapes(
 
   std::vector<float> matrixWB(data.numColumnB * 3lu, 0.f);
   uint32_t flatBIndex = 0;
-  for (uint32_t bsIndex = 0; bsIndex < data.numBlendshapes; ++bsIndex) {
+  for (uint32_t bsIndex = 0; bsIndex < data.numBS; ++bsIndex) {
     float bsWeight = data.blendshapeWeights[bsIndex];
     for (uint32_t i = 0; i < 3; ++i) {
       uint32_t numValuesRow = data.matrixBNumValuesRow[bsIndex * 3 + i];
