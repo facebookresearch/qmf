@@ -6,7 +6,7 @@ The vertex indices for the sparse blendshape representation are 32-bit integers,
 
 We compare our method against \csfb. For each dataset we use 400 bones, 8 weights per vertex, and 6,000 non-zero values for transformations, except the Louise and Carlos datasets, where 20,000 non-zero values were required for high-quality results. 
 The chosen number of bones is higher than in \cite{kavan2024compressed} to allow \csfb better capture small details, while maintaining the same number of non-zeros for transformation matrices. This ensures a fair quality comparison with our matrix factorization methods.
-We first ran experiments to see the effect of applying our new loss function (\Eq{eq:NewLoss}) on \csfb.  We observed significant quality improvements in wrinkle areas  (see \Figure{fig:CSFBAura}) and slight improvements in metrics (see \Table{tab:FullResults}).  Having established that our new loss function produces better results, the remainder of comparisons against our sparse matrix factorization technique will be using \csfb with the new loss function.
+We first ran experiments to evaluate the effect of our new loss function (\Eq{eq:NewLoss}) on \csfb. It led to significant quality improvements in wrinkle areas (see \Figure{fig:CSFBAura}) and slight metric gains (see \Table{tab:FullResults}). Having established its effectiveness, all further comparisons with our sparse matrix factorization use \csfb with the new loss.
 
 \begin{comment}
 
@@ -38,7 +38,7 @@ As shown in \Figure{fig:Teaser} and  \Figure{fig:QMFNewNormAndWrinkles}, the spa
 
 To assess the differences between algorithms in a real-time environment, we implemented sparse blendshapes, \csfb, and sparse matrix factorization in C++ and in CUDA. The \csfb implementation was highly optimized and works directly with a sparse matrix of bone transformations with only 6 degrees of freedom for each bone.  Like \qmf, sparse blendshapes required some auxiliary precomputed data for efficient GPU computation. \csfb does not require extra information for efficient processing on the GPU.
 
-We executed the same animation sequence with precomputed blendshape weights with each algorithm and measured average wall clock time, with results shown in \Figure{fig:RuntimeCost}. \qmf selects 8-bit quantization for the Aura and Jupiter models, and 10.66-bit as the smallest quantization and 16-bit as the fastest runtime quantization for all other models. 
+We run the same animation sequence with precomputed blendshape weights with each algorithm and measured average wall clock time, with results shown in \Figure{fig:RuntimeCost}. \qmf selects 8-bit quantization for the Aura and Jupiter models, and 10.66-bit as the smallest quantization and 16-bit as the fastest runtime quantization for all other models. 
 We can observe that our sparse factorization methods are significantly faster than an optimized version of \csfb. \qmf can be slightly slower than non-quantized sparse matrix factorization due to additional costs for dequantization and because the non-quantized sparse matrix factorization data already fits in CPU cache.  
 
 When evaluating on the GPU, we noted that a common scenario would be to animate multiple faces per frame. To that end, we run 10 animations concurrently.  Results for our CUDA implementation are shown in \Figure{fig:RuntimeCostGPU}.  We note that
