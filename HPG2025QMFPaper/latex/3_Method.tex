@@ -128,7 +128,7 @@ These choices are determined by the order of matrix multiplication at runtime. S
 
 Experimental results indicate that  $\numColumnB = 200$ (columns of $\matB$ and rows of $\matC$) is sufficient to achieve low errors. Because $\numColumnB \le 255$, we use an 8-bit representation to encode the column index for matrix $\matB$ and the row index for matrix $\matC$. Instead of storing an array of offsets, we store the number of non-zero values per row in matrix $\matB$ or per column in matrix $\matC$ and compute offsets in order to calculate the next dot product during matrix multiplication. 
 %For example, see how \texttt{numValuesRow} is used in \Algorithm{alg:RuntimeCode}. 
-Consequently, to index both matrices, we need to store $\numVertices + 3\numBS$ bytes for $\numVertices$ vertices and  $\numBS$ blendshapes.
+Consequently, to index both matrices, we need to store $\numVertices + 3\numBS + \numNonzeroBC$ bytes for $\numVertices$ vertices, $\numBS$ blendshapes, and $\numNonzeroBC$ non-zero values across $\matB$ and $\matC$.
 %
 %--- Quantization
 \begin{figure}
