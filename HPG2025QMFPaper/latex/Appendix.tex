@@ -1,3 +1,4 @@
+\begin{comment}
 \begin{figure*}
 \centering
 \begin{minipage}{.33\textwidth}
@@ -28,6 +29,44 @@
   \subfloat[Proteus]{\includegraphics[width=0.2349\linewidth]{modelProteus.png}}\hspace{1cm}
   \subfloat[Louise]{\includegraphics[width=0.2349\linewidth]{modelLouise.png}}\hspace{1cm}
   \subfloat[Carlos]{\includegraphics[width=0.2349\linewidth]{modelCarlos.png}}
+    % \vspace{1em}
+\caption{Images rendered from the datasets used for experiments.}
+\label{fig:Datasets}
+\end{figure*}
+\end{comment}
+
+
+\begin{figure*}
+  \includegraphics[width=0.6\linewidth]{durationDiagramCPU.pdf}
+  \vspace{-.33em}
+    \captionof{figure}{CPU: Average facial expression calculation wall time}
+\vspace{-.55em}
+    \label{fig:RuntimeCost}
+  \end{figure*}
+\begin{figure*}
+  \includegraphics[width=0.6\linewidth]{durationDiagramCUDA.pdf}
+  \vspace{-.33em}
+    \captionof{figure}{GPU: Average wall time for 10 concurrent facial expression calculations}
+ \vspace{-.55em}
+   \label{fig:RuntimeCostGPU}
+\end{figure*}
+\begin{figure*}
+\includegraphics[width=0.6\linewidth]{compressionRatesDiagram.pdf}
+     \vspace{-.33em}
+     \captionof{figure}{Compression Rates relative to sparse blendshapes size}
+     \vspace{-.55em}
+    \label{fig:Compression}
+\end{figure*}
+
+
+\begin{figure*}[p]
+  \subfloat[Aura]{\includegraphics[width=0.3\linewidth]{modelAura.png}} \hspace{1em}
+  \subfloat[Bowen]{\includegraphics[width=0.3\linewidth]{modelBoz.png}} \hspace{1em}
+  \subfloat[Jupiter]{\includegraphics[width=0.3\linewidth]{modelJupiter.png}} \\
+   % \vspace{1em}
+  \subfloat[Proteus]{\includegraphics[width=0.3\linewidth]{modelProteus.png}}\hspace{1em}
+  \subfloat[Louise]{\includegraphics[width=0.3\linewidth]{modelLouise.png}}\hspace{1em}
+  \subfloat[Carlos]{\includegraphics[width=0.3\linewidth]{modelCarlos.png}}
     % \vspace{1em}
 \caption{Images rendered from the datasets used for experiments.}
 \label{fig:Datasets}
