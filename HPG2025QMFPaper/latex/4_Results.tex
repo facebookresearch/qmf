@@ -25,7 +25,7 @@ mean absolute error (MAE) and maximum absolute error (MXE), corresponding to $L^
 MAE is the mean over all vertices of $|\matA - \matB\matC|$ and $\mathrm{MXE} = \max{|\matA - \matB\matC|}$ over all vertices.  The third metric attempts to measure noise introduced by optimization and quantization, and we use the average edge angular difference (EAD). This is calculated as the mean of $ | \beta_{A} - \beta_{BC} | $  over all edges, where $\beta$ represents the dihedral angle between an edge's adjacent faces.
 
 To determine the optimal value of parameter $\alpha$, we conducted multiple optimization runs for all models and plotted the resulting curves for our metrics. Notably, all models exhibited a consistent behavior: as
-$\alpha$ increased, the noise metric improved rapidly, while the position metrics degraded almost linearly.% (see \Figure{fig:chooseAlpha})
+$\alpha$ increased, the noise metric improved rapidly, while the position metrics degraded almost linearly. % (see \Figure{fig:chooseAlpha})
  For every model we choose the biggest $\alpha$ value that did not significantly degrade the position metrics.
 
 %----
