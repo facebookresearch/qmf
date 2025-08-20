@@ -129,9 +129,17 @@
 \newif\ifcomment
 %\commentfalse
 \commenttrue
-\newcommand{\LK}[1]{\ifcomment{\textcolor{orange}{(LK: #1)}}\else \fi}
-\newcommand{\BB}[1]{\ifcomment{\textcolor{red}{(BB: #1)}}\else \fi}
-\newcommand{\RF}[1]{\ifcomment{\textcolor{blue}{(RF: #1)}}\else \fi}
+\newcommand{\LK}[1]{\ifcomment{\colorbox{orange}{\textcolor{white}{(LK: #1)}}}\else \fi}
+\newcommand{\BB}[1]{\ifcomment{\colorbox{yellow}{\textcolor{white}{(BB: #1)}}}\else \fi}
+\newcommand{\RF}[1]{\ifcomment{\colorbox{cyan}{\textcolor{white}{(RF: #1)}}}\else \fi}
+
+% three new commands to highlight changes: \remove{} \add{} \replace{}{}
+\usepackage[normalem]{ulem} % to cross deleted text
+\newif\ifchanges
+\changestrue % \changesfalse
+\newcommand{\remove}[1]{\ifchanges{\textcolor{red}{\sout{#1}}}\else \fi}
+\newcommand{\replace}[2]{\ifchanges{\textcolor{red}{\sout{#1}}\textcolor{blue}{#2}}\else #2\fi}
+\newcommand{\add}[1]{\ifchanges{\textcolor{blue}{#1}}\else #1\fi}
 
 % paper notations
 \newcommand{\numBS}{S} % F for frames
