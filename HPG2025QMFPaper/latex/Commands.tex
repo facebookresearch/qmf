@@ -135,10 +135,11 @@
 
 % three new commands to highlight changes: \remove{} \add{} \replace{}{}
 \usepackage[normalem]{ulem} % to cross deleted text
+\newcommand{\stkout}[1]{\ifmmode\text{\sout{\ensuremath{#1}}}\else\sout{#1}\fi}
 \newif\ifchanges
 \changestrue % \changesfalse
 \newcommand{\remove}[1]{\ifchanges{\textcolor{red}{\sout{#1}}}\else \fi}
-\newcommand{\replace}[2]{\ifchanges{\textcolor{red}{\sout{#1}}\textcolor{blue}{#2}}\else #2\fi}
+\newcommand{\replace}[2]{\ifchanges{\textcolor{red}{\stkout{#1}}\textcolor{blue}{#2}}\else #2\fi}
 \newcommand{\add}[1]{\ifchanges{\textcolor{blue}{#1}}\else #1\fi}
 
 % paper notations
@@ -157,6 +158,7 @@
 \newcommand{\wrinklesMap}{\mathbf{D}}
 \newcommand{\wrinklesMult}{\gamma}
 \newcommand{\restPose}{\mathbf{R}}
+\newcommand{\vertexRestPose}{\mathbf{r}}
 \newcommand{\identity}{\mathbf{I}}
 \newcommand{\matWB}{\mathbf{wB}}
 \newcommand{\getNumNz}{\operatorname{nnz}}

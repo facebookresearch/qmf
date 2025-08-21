@@ -1,10 +1,10 @@
 \section{Method}
 A classical blendshape model comprising $\numVertices$ vertices and $\numBS$ blendshapes, can be formulated using the rest pose mesh and "deltas" between the rest pose and individual blendshapes \cite{lewis2014practice}:
 \begin{equation}
-\vertexPos_{0,i} + \sum_{k} \bSWeight_k \Delta\vertexPos_{k,i},
+  \replace{\vertexPos_{0,i}}{\vertexRestPose_i} + \sum_{k} \bSWeight_k \Delta\vertexPos_{k,i},
 \label {eq:ShapeCalculation}
 \end{equation}
-where $\vertexPos_{0,i}\in\reals^3$ is the $i$-th rest-pose vertex, $\Delta\vertexPos_{k,i}$  denotes the positional difference between the $i$-th vertex of the $k$-th blendshape and its corresponding vertex in the rest pose, and
+where $\replace{\vertexPos_{0,i}}{\vertexRestPose_i}\in\reals^3$ is the $i$-th rest-pose vertex, $\Delta\vertexPos_{k,i}$  denotes the positional difference between the $i$-th vertex of the $k$-th blendshape and its corresponding vertex in the rest pose, and
 $\bSWeight_k$ are blendshape weights defining facial expression; in this paper, we treat these as inputs. In typical runtime systems, the $\bSWeight_k$ are computed via facial rigs which may also contain nonlinearities \cite{lewis2014practice}, but the subsequent blending is linear. We can stack all of the blendshapes into a matrix $\matA\in\reals^{3\numBS \times \numVertices}$:
 \[
 \matA =
@@ -14,6 +14,13 @@ $\bSWeight_k$ are blendshape weights defining facial expression; in this paper, 
   \Delta\vertexPos_{\numBS,1} & \dots & \Delta\vertexPos_{\numBS,\numVertices} \\
 \end{bmatrix}
 \]
+\add{and write \Equation{eq:ShapeCalculation} in matrix form:
+\begin{equation}
+\restPose + \bSWeight\matA,
+\label {eq:MatShapeCalculation}
+\end{equation}
+where $\bSWeight = (\identity \bSWeight_1, \dots, \identity \bSWeight_\numBS)$, $\identity$ is a $3\times3$ identity matrix and $\restPose\in\reals^{3\times\numVertices}$ are vertex positions of the rest pose.
+}
 Modern models often consist of hundreds to thousands of blendshapes and thus the storage of the matrix $\matA$ is an important consideration. The runtime speed of facial expression calculation is primarily determined by fetching elements of $\matA$ from memory.
 The main objectives of our method is to develop an efficient representation for $\matA$ to enhance the real-time performance of facial expression calculations while simultaneously reducing the memory footprint.
 
@@ -235,11 +242,11 @@ void computeSparseFactorizationBlendshapes(
 
 \end{comment}
 
-Calculation of  \Equation{eq:ShapeCalculation} with sparse representation of matrix $\matA$ requires two matrix multiplications and a vector addition:
+Calculation of  \replace{\Equation{eq:ShapeCalculation}}{\Equation{eq:MatShapeCalculation}} with sparse representation of matrix $\matA$ requires two matrix multiplications and a vector addition:
 \[
- \bSWeight \matB \matC + \restPose,
+  \bSWeight \matB \matC + \restPose.
 \]
-where $\bSWeight = (\identity \bSWeight_1, \dots, \identity \bSWeight_\numBS)$, $\identity$ is a $3\times3$ identity matrix and $\restPose\in\reals^{3\times\numVertices}$ are vertex positions of the rest pose. The result of the first calculation is a dense matrix $\bSWeight \matB\in\reals^{3\times\numColumnB}$. We allocate the column-major matrix $\matWB$ to hold $3\times\numColumnB$ float numbers and initialize it with zeros.
+\remove{where $\bSWeight = (\identity \bSWeight_1, \dots, \identity \bSWeight_\numBS)$, $\identity$ is a $3\times3$ identity matrix and $\restPose\in\reals^{3\times\numVertices}$ are vertex positions of the rest pose.} The result of the first calculation is a dense matrix $\bSWeight \matB\in\reals^{3\times\numColumnB}$. We allocate the column-major matrix $\matWB$ to hold $3\times\numColumnB$ float numbers and initialize it with zeros.
 %\BB{TODO, Roman, please fix?}
 \begin{comment}
 {\tiny
