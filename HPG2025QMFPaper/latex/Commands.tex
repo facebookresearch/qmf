@@ -14,7 +14,6 @@
 
 \usepackage[makeroom]{cancel}
 
-
 \newcommand{\tderiv}[2]{\frac{d #1}{d #2}}
 \newcommand{\ttderiv}[2]{\frac{d^2 #1}{d #2^2}}
 \newcommand{\ttderivmixed}[3]{\frac{d^2 #1}{d #2 d #3}}
@@ -141,6 +140,7 @@
 \newcommand{\remove}[1]{\ifchanges{\textcolor{red}{\sout{#1}}}\else \fi}
 \newcommand{\replace}[2]{\ifchanges{\textcolor{red}{\stkout{#1}}\textcolor{blue}{#2}}\else #2\fi}
 \newcommand{\add}[1]{\ifchanges{\textcolor{blue}{#1}}\else #1\fi}
+\newcommand{\removeTableRow}{\rowcolor{red}}
 
 % paper notations
 \newcommand{\numBS}{S} % F for frames
