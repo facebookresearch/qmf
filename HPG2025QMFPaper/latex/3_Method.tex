@@ -153,18 +153,18 @@ Consequently, to index both matrices, we need to store $\numVertices + 3\numBS +
 %
 
 Having significantly reduced the data for indexing the sparse matrices, what remains is to reduce the amount of memory used to encode the floating point non-zero values. We employ quantization to minimize the number of bits required to represent each value.
-After optimization is complete, we independently quantize the non-zero values for both matrices $\matB$ and $\matC$. For each of  $\matB$ and $\matC$, we find the minimum and maximum scalar values.  Then we use the following quantization formula for $Q$ bits:
+After optimization is complete, we independently quantize the non-zero values for both matrices $\matB$ and $\matC$. For each of  $\matB$ and $\matC$, we find the minimum and maximum scalar values.  Then we use the following quantization formula for $\numBitsPerNz$ bits:
 \begin{equation*}
-  V_Q = \text{round}((V - V_{\mathrm{min}})/(V_{\mathrm{max}} - V_{\mathrm{min}}) \cdot (2^Q - 1))
+  V_\numBitsPerNz = \text{round}((V - V_{\mathrm{min}})/(V_{\mathrm{max}} - V_{\mathrm{min}}) \cdot (2^\numBitsPerNz - 1))
 \end{equation*}
 
-We store $V_{\mathrm{min}}$, $V_{\mathrm{max}}$, and $Q$, and this allows us to dequantize via: 
+We store $V_{\mathrm{min}}$, $V_{\mathrm{max}}$, and $\numBitsPerNz$, and this allows us to dequantize via: 
 \begin{equation*}    
-  V = V_{\mathrm{min}} + (V_Q \cdot (V_{\mathrm{max}} - V_{\mathrm{min}}) )/(2^Q - 1)
+  V = V_{\mathrm{min}} + (V_\numBitsPerNz \cdot (V_{\mathrm{max}} - V_{\mathrm{min}}) )/(2^\numBitsPerNz - 1)
 \end{equation*}
 
+\add{To store the indices and quantized non-zero values of both matrices $\matB$ and $\matC$, we require $\numVertices + 3\numBS + \numNonzeroBC + \numNonzeroBC\numBitsPerNz/8$ bytes.}
 
-%
 As shown in \Figure{fig:QuantizationMetrics}, our metrics degrade gradually as we reduce the number of bits per value. Notably, the data indicates that using 8-bit quantized values only slightly compromises the final quality of the shape, seeming to make it a viable option for optimizing memory usage.  However, despite the positional metrics' accuracy, we were able to discern visible noise with larger deformations on our denser models (see \Figure{fig:quantizationNoise}).  This quantization noise corresponds to areas where a small error will have a noticeable effect on local curvature.
 To address this, we employ the average edge angular difference metric (EAD, detailed in \Section{sec:results}) to compare the quantized matrices with their floating-point counterparts. We select a quantization factor that minimizes degradation of this metric, ensuring it remains within a few percent of the original value.
 
