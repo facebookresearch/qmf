@@ -55,7 +55,7 @@
 \subsection*{CPU Runtime Code}
 This supplementary material provides the CPU implementation for applying blendshapes at runtime using sparse matrix factorization.
 
-To perform the multiplication efficiently, we iterate over the array~$\bSWeight$. For each non-zero weight, we access the corresponding three rows of the matrix $\matB$. If $\matB$ contains non-zero entries for the given weight, we perform the necessary multiplications and accumulate the results into the intermediate matrix $\matWB$.
+To perform the multiplication efficiently, we iterate over the array~$\matBSWeight$. For each non-zero weight, we access the corresponding three rows of the matrix $\matB$. If $\matB$ contains non-zero entries for the given weight, we perform the necessary multiplications and accumulate the results into the intermediate matrix $\matWB$.
 
 In the final stage of the algorithm, we multiply the small dense matrix $\matWB$ with sparse matrix $\matC$. This is done by iterating over the columns of $\matC$. For each non-zero entry, we access the corresponding column in $\matWB$, perform the multiplication, and add the result to the precomputed rest pose value. The final result is then stored. (See \Algorithm{alg:RuntimeCode})
 % \vspace{5cm}

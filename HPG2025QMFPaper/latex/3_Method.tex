@@ -16,10 +16,10 @@ $\bSWeight_k$ are blendshape weights defining facial expression; in this paper, 
 \]
 \add{and write \Equation{eq:ShapeCalculation} in matrix form:
 \begin{equation}
-\restPose + \bSWeight\matA,
+\restPose + \matBSWeight\matA,
 \label {eq:MatShapeCalculation}
 \end{equation}
-where $\bSWeight = (\identity \bSWeight_1, \dots, \identity \bSWeight_\numBS)$, $\identity$ is a $3\times3$ identity matrix and $\restPose\in\reals^{3\times\numVertices}$ are vertex positions of the rest pose.
+where $\matBSWeight = (\identity \bSWeight_1, \dots, \identity \bSWeight_\numBS)$, $\identity$ is a $3\times3$ identity matrix and $\restPose\in\reals^{3\times\numVertices}$ are vertex positions of the rest pose.
 }
 Modern models often consist of hundreds to thousands of blendshapes and thus the storage of the matrix $\matA$ is an important consideration. The runtime speed of facial expression calculation is primarily determined by fetching elements of $\matA$ from memory.
 The main objectives of our method is to develop an efficient representation for $\matA$ to enhance the real-time performance of facial expression calculations while simultaneously reducing the memory footprint.
@@ -244,9 +244,9 @@ void computeSparseFactorizationBlendshapes(
 
 Calculation of  \replace{\Equation{eq:ShapeCalculation}}{\Equation{eq:MatShapeCalculation}} with sparse representation of matrix $\matA$ requires two matrix multiplications and a vector addition:
 \[
-  \bSWeight \matB \matC + \restPose.
+  \matBSWeight \matB \matC + \restPose.
 \]
-\remove{where $\bSWeight = (\identity \bSWeight_1, \dots, \identity \bSWeight_\numBS)$, $\identity$ is a $3\times3$ identity matrix and $\restPose\in\reals^{3\times\numVertices}$ are vertex positions of the rest pose.} The result of the first calculation is a dense matrix $\bSWeight \matB\in\reals^{3\times\numColumnB}$. We allocate the column-major matrix $\matWB$ to hold $3\times\numColumnB$ float numbers and initialize it with zeros.
+\remove{where $\matBSWeight = (\identity \matBSWeight_1, \dots, \identity \matBSWeight_\numBS)$, $\identity$ is a $3\times3$ identity matrix and $\restPose\in\reals^{3\times\numVertices}$ are vertex positions of the rest pose.} The result of the first calculation is a dense matrix $\matBSWeight \matB\in\reals^{3\times\numColumnB}$. We allocate the column-major matrix $\matWB$ to hold $3\times\numColumnB$ float numbers and initialize it with zeros.
 %\BB{TODO, Roman, please fix?}
 \begin{comment}
 {\tiny
@@ -273,7 +273,7 @@ Calculation of  \replace{\Equation{eq:ShapeCalculation}}{\Equation{eq:MatShapeCa
 \end{equation}
 }
 \end{comment}
-To perform this multiplication efficiently we iterate over the array $\bSWeight$. For every non-zero weight value we need to iterate over 3 rows of the matrix $\matB$. If $\matB$ has non-zero values for a given weight, we perform multiplication and store the result in $\matWB$.
+To perform this multiplication efficiently we iterate over the array $\matBSWeight$. For every non-zero weight value we need to iterate over 3 rows of the matrix $\matB$. If $\matB$ has non-zero values for a given weight, we perform multiplication and store the result in $\matWB$.
 The final step of the algorithm is to multiply the small dense matrix $\matWB$ with $\matC$. We iterate over the columns of the matrix $\matC$, and for every non-zero value we will read a column in matrix $\matWB$. We add the result of multiplication to the value from the rest pose and store the result. 
 %The CPU source code is available in \Algorithm{alg:RuntimeCode}.
 
