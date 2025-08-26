@@ -182,9 +182,7 @@ The results obtained with our method are somewhat dependent on random initializa
 the difference in loss could be about 15\% between choosing good and poor random seeds.  We observed, however, that once started, the optimization trajectories for the best seeds, seem to be somewhat predictable after about 5\% of iterations.  Therefore, a practical approach to achieve near-optimal results is to run several hundred iterations with several seeds and select the best thus far to continue optimizing.  In practice, we use 20 random seeds running 5\% of iterations, and then run the best one to 100\%, reducing the runtime cost to a good solution by a factor of about 10x.
 
 \subsection{Runtime implementation} \label{sec:runtime}
-
 \begin{comment}
-
 \begin{lrbox}{\codebox}
 \begin{lstlisting}[language=c++, basicstyle=\scriptsize]
 template <typename BlendShapeData, typename ValueType>
@@ -239,9 +237,8 @@ void computeSparseFactorizationBlendshapes(
 \label{alg:RuntimeCode}
 \usebox{\codebox}
 \end{algorithm}
-
 \end{comment}
-
+\add{Compared to the  HSS representation of \citet{seo2011compression}, our method employs a much simpler runtime data structure.} %, resulting in more straightforward code
 Calculation of  \replace{\Equation{eq:ShapeCalculation}}{\Equation{eq:MatShapeCalculation}} with sparse representation of matrix $\matA$ requires two matrix multiplications and a vector addition:
 \[
   \matBSWeight \matB \matC + \restPose.
