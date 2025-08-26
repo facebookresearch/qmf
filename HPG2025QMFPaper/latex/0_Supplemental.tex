@@ -52,7 +52,8 @@
 \maketitle
 % \section{Supplemental Material}
 % \vspace{4mm}
-\subsection*{CPU Runtime Code}
+
+\subsection*{CPU Runtime Code and results}
 This supplementary material provides the CPU implementation for applying blendshapes at runtime using sparse matrix factorization.
 
 To perform the multiplication efficiently, we iterate over the array~$\matBSWeight$. For each non-zero weight, we access the corresponding three rows of the matrix $\matB$. If $\matB$ contains non-zero entries for the given weight, we perform the necessary multiplications and accumulate the results into the intermediate matrix $\matWB$.
@@ -124,5 +125,6 @@ void computeSparseFactorizationBlendshapes(
 \usebox{\codebox}
 \end{algorithm}
 
+\input{generated/bigTableFull.tex}
 
 \end{document}
