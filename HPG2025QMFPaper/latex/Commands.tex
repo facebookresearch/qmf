@@ -133,12 +133,12 @@
 \newcommand{\RF}[1]{\ifcomment{\colorbox{cyan}{\textcolor{white}{(RF: #1)}}}\else \fi}
 
 % three new commands to highlight changes: \remove{} \add{} \replace{}{}
-\usepackage[normalem]{ulem} % to cross deleted text
-\newcommand{\stkout}[1]{\ifmmode\text{\sout{\ensuremath{#1}}}\else\sout{#1}\fi}
+% \usepackage[normalem]{ulem} % to cross deleted text
+% \newcommand{\stkout}[1]{\ifmmode\text{\sout{\ensuremath{#1}}}\else\sout{#1}\fi}
 \newif\ifchanges
 \changestrue % \changesfalse
-\newcommand{\remove}[1]{\ifchanges{\textcolor{red}{\sout{#1}}}\else \fi}
-\newcommand{\replace}[2]{\ifchanges{\textcolor{red}{\stkout{#1}}\textcolor{blue}{#2}}\else #2\fi}
+\newcommand{\remove}[1]{\ifchanges{\textcolor{red}{#1}}\else \fi}
+\newcommand{\replace}[2]{\ifchanges{\textcolor{red}{#1}\textcolor{blue}{#2}}\else #2\fi}
 \newcommand{\add}[1]{\ifchanges{\textcolor{blue}{#1}}\else #1\fi}
 \newcommand{\removeTableRow}{\rowcolor{red}}
 
