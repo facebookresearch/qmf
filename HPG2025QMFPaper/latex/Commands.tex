@@ -12,8 +12,7 @@
 \def\etal{\emph{et al}\onedot}
 \makeatother
 
-\usepackage[makeroom]{cancel}
-
+%\usepackage[makeroom]{cancel}
 
 \newcommand{\tderiv}[2]{\frac{d #1}{d #2}}
 \newcommand{\ttderiv}[2]{\frac{d^2 #1}{d #2^2}}
@@ -134,12 +133,14 @@
 \newcommand{\RF}[1]{\ifcomment{\colorbox{cyan}{\textcolor{white}{(RF: #1)}}}\else \fi}
 
 % three new commands to highlight changes: \remove{} \add{} \replace{}{}
-\usepackage[normalem]{ulem} % to cross deleted text
+% \usepackage[normalem]{ulem} % to cross deleted text
+% \newcommand{\stkout}[1]{\ifmmode\text{\sout{\ensuremath{#1}}}\else\sout{#1}\fi}
 \newif\ifchanges
 \changestrue % \changesfalse
-\newcommand{\remove}[1]{\ifchanges{\textcolor{red}{\sout{#1}}}\else \fi}
-\newcommand{\replace}[2]{\ifchanges{\textcolor{red}{\sout{#1}}\textcolor{blue}{#2}}\else #2\fi}
+\newcommand{\remove}[1]{\ifchanges{\textcolor{red}{#1}}\else \fi}
+\newcommand{\replace}[2]{\ifchanges{\textcolor{red}{#1}\textcolor{blue}{#2}}\else #2\fi}
 \newcommand{\add}[1]{\ifchanges{\textcolor{blue}{#1}}\else #1\fi}
+\newcommand{\removeTableRow}{\rowcolor{red}}
 
 % paper notations
 \newcommand{\numBS}{S} % F for frames
@@ -151,12 +152,16 @@
 \newcommand{\matC}{\mathbf{C}}
 \newcommand{\matM}{\mathbf{M}}
 \newcommand{\vertexPos}{\mathbf{v}}
-\newcommand{\bSWeight}{\mathbf{w}}
+\newcommand{\bSWeight}{w}
+\newcommand{\matBSWeight}{\mathbf{w}}
 \newcommand{\numNonzeroBC}{K}
+\newcommand{\numBitsPerNz}{Q}
+
 \newcommand{\meanCurvature}{\mathbf{H}}
 \newcommand{\wrinklesMap}{\mathbf{D}}
 \newcommand{\wrinklesMult}{\gamma}
 \newcommand{\restPose}{\mathbf{R}}
+\newcommand{\vertexRestPose}{\mathbf{r}}
 \newcommand{\identity}{\mathbf{I}}
 \newcommand{\matWB}{\mathbf{wB}}
 \newcommand{\getNumNz}{\operatorname{nnz}}
