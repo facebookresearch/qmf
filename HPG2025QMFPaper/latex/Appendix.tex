@@ -69,28 +69,82 @@
 % \label{fig:Datasets}
 % \end{figure*}
 
+%-----
+% \newcommand{\lineOfImages}[2]{
+% \rotatebox[origin=c]{90}{\centering #2} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\linewidth, trim=0pt -1mm 0pt -1mm]{#1NoseOrig.png}\ifthenelse{\equal{#1}{proteus}}{\llap{\includegraphics[height=0.075\linewidth]{legendDistanceMap.pdf}}}{}
+% }&
+% \raisebox{-.5\height}{\includegraphics[width=0.15\linewidth, trim=0pt -1mm 0pt -1mm]{#1NoseCSFB.png}} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\linewidth, trim=0pt -1mm 0pt -1mm]{#1NoseQMF.png}} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\linewidth, trim=0pt -1mm 0pt -1mm]{#1ForeheadOrig.png}} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\linewidth, trim=0pt -1mm 0pt -1mm]{#1ForeheadCSFB.png}} &
+% \raisebox{-.5\height}{\includegraphics[width=0.15\linewidth, trim=0pt -1mm 0pt -1mm]{#1ForeheadQMF.png}}
+% }
+% \begin{figure*}[p]
+%     \setlength{\tabcolsep}{2pt}
+%     % \renewcommand{\arraystretch}{9}
+%     \begin{tabular}{c c c c c c c}
+%       % \hline
+%       \lineOfImages{aura}{Aura} \\
+%       \lineOfImages{bowen}{Bowen} \\
+%       \lineOfImages{jupiter}{Jupiter}  \\
+%     \lineOfImages{proteus}{Proteus} \\
+%       &Original & CSFB& QMF& Original & CSFB& QMF \\
+%     \end{tabular}
+%     \caption{\add{A visual inspection of error of CSFB vs QMF.  The error visualized in red is the vertex distance between uncompressed and the CSFB and QMF compressed methods.}}
+% \label{fig:poses}
+% \end{figure*}
 
-\newcommand{\lineOfImages}[2]{
-\rotatebox[origin=c]{90}{\centering #2} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\linewidth, trim=0pt -1mm 0pt -1mm]{#1NoseOrig.png}\ifthenelse{\equal{#1}{proteus}}{\llap{\includegraphics[height=0.075\linewidth]{legendDistanceMap.pdf}}}{}
-}&
-\raisebox{-.5\height}{\includegraphics[width=0.15\linewidth, trim=0pt -1mm 0pt -1mm]{#1NoseCSFB.png}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\linewidth, trim=0pt -1mm 0pt -1mm]{#1NoseQMF.png}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\linewidth, trim=0pt -1mm 0pt -1mm]{#1ForeheadOrig.png}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\linewidth, trim=0pt -1mm 0pt -1mm]{#1ForeheadCSFB.png}} &
-\raisebox{-.5\height}{\includegraphics[width=0.15\linewidth, trim=0pt -1mm 0pt -1mm]{#1ForeheadQMF.png}}
+%--------------------------------------exp---------------------------------------
+
+% \begin{minipage}[b]{35mm}
+%   \includegraphics[width=35mm]{auraNoseOrig.png}
+% \end{minipage}
+
+
+
+\newcommand{\poseWidth}{28mm}
+\newcommand{\onePose}{
 }
+\newcommand{\lineOfImagesNoTable}[2]{
+\rotatebox[origin=c]{90}{\centering #2}
+% \raisebox{-.5\height}{\includegraphics[width=\poseWidth]{#1NoseOrig.png}\llap{\includegraphics[height=0.075\linewidth]{legendDistanceMap.pdf}}}
+\raisebox{-.5\height}{\includegraphics[width=\poseWidth]{#1NoseOrig.png}\llap{\ifthenelse{\equal{#1}{proteus}}{\includegraphics[height=0.090\linewidth]{legendDistanceMap.pdf}}{}}}
+\raisebox{-.5\height}{\includegraphics[width=\poseWidth]{#1NoseCSFB.png}}
+\raisebox{-.5\height}{\includegraphics[width=\poseWidth]{#1NoseQMF.png}}
+\raisebox{-.5\height}{\includegraphics[width=\poseWidth]{#1ForeheadOrig.png}}
+\raisebox{-.5\height}{\includegraphics[width=\poseWidth]{#1ForeheadCSFB.png}}
+\raisebox{-.5\height}{\includegraphics[width=\poseWidth]{#1ForeheadQMF.png}} 
+\vspace{1mm}
+}
+\newcommand{\lineOfCaptions}{
+  \rotatebox[origin=c]{90}{\centering \phantom{c} }
+\begin{minipage}[c]{28mm}
+ \centering Original
+\end{minipage}
+\begin{minipage}[c]{28mm}
+ \centering CSFB
+\end{minipage}
+\begin{minipage}[c]{28mm}
+ \centering QMF
+\end{minipage}
+\begin{minipage}[c]{28mm}
+ \centering Original
+\end{minipage}
+\begin{minipage}[c]{28mm}
+ \centering CSFB
+\end{minipage}
+\begin{minipage}[c]{28mm}
+ \centering QMF
+\end{minipage}
+}
+
 \begin{figure*}[p]
-    \setlength{\tabcolsep}{2pt}
-    % \renewcommand{\arraystretch}{9}
-    \begin{tabular}{c c c c c c c}
-      % \hline
-      \lineOfImages{aura}{Aura} \\
-      \lineOfImages{bowen}{Bowen} \\
-      \lineOfImages{jupiter}{Jupiter}  \\
-    \lineOfImages{proteus}{Proteus} \\
-      &Original & CSFB& QMF& Original & CSFB& QMF \\
-    \end{tabular}
+  \lineOfImagesNoTable{aura}{Aura} \\
+  \lineOfImagesNoTable{bowen}{Bowen} \\
+  \lineOfImagesNoTable{jupiter}{Jupiter} \\
+  \lineOfImagesNoTable{proteus}{Proteus} \\
+  \lineOfCaptions
     \caption{\add{A visual inspection of error of CSFB vs QMF.  The error visualized in red is the vertex distance between uncompressed and the CSFB and QMF compressed methods.}}
 \label{fig:poses}
 \end{figure*}
