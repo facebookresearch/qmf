@@ -136,7 +136,8 @@
 % \usepackage[normalem]{ulem} % to cross deleted text
 % \newcommand{\stkout}[1]{\ifmmode\text{\sout{\ensuremath{#1}}}\else\sout{#1}\fi}
 \newif\ifchanges
-\changestrue % \changesfalse
+% \changestrue
+\changesfalse
 \newcommand{\remove}[1]{\ifchanges{\textcolor{red}{#1}}\else \fi}
 \newcommand{\replace}[2]{\ifchanges{\textcolor{red}{#1}\textcolor{blue}{#2}}\else #2\fi}
 \newcommand{\add}[1]{\ifchanges{\textcolor{blue}{#1}}\else #1\fi}
