@@ -7,16 +7,44 @@ The vertex indices for the sparse blendshape representation are 32-bit integers,
 We compare our method against \csfb. For each dataset we use 400 bones, 8 weights per vertex, and 6,000 non-zero values for transformations, except the Louise and Carlos datasets, where 20,000 non-zero values were required for high-quality results. 
 The chosen number of bones is higher than in \cite{kavan2024compressed} to allow \csfb better capture small details, while maintaining the same number of non-zeros for transformation matrices. This ensures a fair quality comparison with our matrix factorization methods.
 We first ran experiments to evaluate the effect of our new loss function (\Eq{eq:NewLoss}) on \csfb. It led to significant quality improvements in wrinkle areas (see \Figure{fig:CSFBAura}) and slight metric gains (see \Table{tab:FullResults}). Having established its effectiveness, all further comparisons with our sparse matrix factorization use \csfb with the new loss.
-
-\begin{comment}
-
-\begin{figure}
-    \includegraphics[width=\linewidth]{chooseAlpha.pdf}
-    \caption{Choosing $\alpha$ (Bowen model).}
-    \label{fig:chooseAlpha}
+\begin{figure}[t]
+    \includegraphics[width=0.31\linewidth]{aura_forehead_orig.png}
+    \includegraphics[width=0.31\linewidth]{aura_forehead_SD0.png}
+    \includegraphics[width=0.31\linewidth]{aura_forehead_SD1.png} \\
+    \vspace{-1em}
+    \includegraphics[width=0.31\linewidth, trim={0cm 39cm 17cm 12cm},clip]{aura_forehead_orig.png}
+    \includegraphics[width=0.31\linewidth, trim={0cm 39cm 17cm 12cm},clip]{aura_forehead_SD0.png}
+    \includegraphics[width=0.31\linewidth, trim={0cm 39cm 17cm 12cm},clip]{aura_forehead_SD1.png}
+    % \vspace{1em}
+    \caption{\csfb results left to right: sparse blendshapes, old loss, new loss }
+    \label{fig:CSFBAura}
+\end{figure}
+% \begin{figure}
+%     \includegraphics[width=\linewidth]{chooseAlpha.pdf}
+%     \caption{Choosing $\alpha$ (Bowen model).}
+%     \label{fig:chooseAlpha}
+% \end{figure}
+\begin{figure}[t] % h-here t-top b-bottom
+ \centering
+ % \includegraphics[width=\textwidth]{}
+  \includegraphics[width=\linewidth]{compressionRatesDiagram.pdf}
+  \caption{Compression Rates relative to sparse blendshapes size}
+  \label{fig:Compression}
+\end{figure}
+\begin{figure}[t] % h-here t-top b-bottom
+ \centering
+  \includegraphics[width=\linewidth]{durationDiagramCPU.pdf}
+  \captionof{figure}{CPU: Average facial expression calculation wall time}
+  \label{fig:RuntimeCost}
+\end{figure}
+\begin{figure}[t] % h-here t-top b-bottom
+ \centering
+  \includegraphics[width=\linewidth]{durationDiagramCUDA.pdf}
+  \captionof{figure}{GPU: Average wall time for 10 concurrent facial expression calculations}
+  \label{fig:RuntimeCostGPU}
 \end{figure}
 
-\end{comment}
+\input{generated/bigTable.tex}
 
 To demonstrate the synergistic effect of the new loss function with the wrinkles map, we created a synthetic dataset by modifying the Jupiter dataset so that every second blendshape is a copy of the blendshape "right eyebrows up".   In \Figure{fig:QMFNewNormAndWrinkles}, we can see (a) that with the original loss function (\Eq{eq:OldLoss}), we are never able to recover wrinkles.  Additionally, we can see (b) that by applying the new loss function (\Eq{eq:NewLoss}), we are able to recover wrinkles on the right side of the face, while we continue to lose them on the left side of the face.  (c) shows that by applying both the new loss function and wrinkles map, we reliably recover both sets of wrinkles. While not shown explicitly in the figure, using the wrinkle map with the old loss function leads to no discernible change from (a).
 
@@ -35,13 +63,6 @@ The value of $\wrinklesMult$ was selected from a range of 0.0006 to 0.003.
 As shown in \replace{\Figure{fig:Teaser} and \Figure{fig:QMFNewNormAndWrinkles}}{Figures \ref{fig:Teaser}, \ref{fig:QMFNewNormAndWrinkles}, and \ref{fig:poses}}, the sparse factorization method preserves details in challenging wrinkle areas. 
 %
  The resulting compression rates are illustrated in \Figure{fig:Compression}.  \qmf demonstrates a 3.2$\times$ to 4.6$\times$ higher compression rate than \csfb.
-\begin{figure}[h] % h-here t-top b-bottom
- \centering
- % \includegraphics[width=\textwidth]{}
-  \includegraphics[width=\linewidth]{compressionRatesDiagram.pdf}
-  \caption{Compression Rates relative to sparse blendshapes size}
-  \label{fig:Compression}
-\end{figure}
 
 To assess the differences between algorithms in a real-time environment, we implemented sparse blendshapes, \csfb, and sparse matrix factorization in C++ and in CUDA. The \csfb implementation was highly optimized and works directly with a sparse matrix of bone transformations with only 6 degrees of freedom for each bone.  Like \qmf, sparse blendshapes required some auxiliary precomputed data for efficient GPU computation. \csfb does not require extra information for efficient processing on the GPU.
 
@@ -53,23 +74,10 @@ When evaluating on the GPU, we noted that a common scenario would be to animate 
 
 Detailed results for all experiments are shown in \Table{tab:FullResults}.   Full optimization code for our method will be released open source concurrent to the conference.  See the supplemental video to view runtime results and the supplemental PDF for CPU code.
 
-\input{generated/bigTable.tex}
 
 %--
 %\input{generated/modelsTable.tex}
 
-\begin{figure}
-    \includegraphics[width=0.31\linewidth]{aura_forehead_orig.png}
-    \includegraphics[width=0.31\linewidth]{aura_forehead_SD0.png}
-    \includegraphics[width=0.31\linewidth]{aura_forehead_SD1.png} \\
-    \vspace{-1em}
-    \includegraphics[width=0.31\linewidth, trim={0cm 39cm 17cm 12cm},clip]{aura_forehead_orig.png}
-    \includegraphics[width=0.31\linewidth, trim={0cm 39cm 17cm 12cm},clip]{aura_forehead_SD0.png}
-    \includegraphics[width=0.31\linewidth, trim={0cm 39cm 17cm 12cm},clip]{aura_forehead_SD1.png}
-    % \vspace{1em}
-    \caption{\csfb results left to right: sparse blendshapes, old loss, new loss }
-    \label{fig:CSFBAura}
-\end{figure}
 
 
 %\begin{figure}
