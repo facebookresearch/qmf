@@ -42,6 +42,7 @@
 *.xdy
 *.xml
 *.prj
+*.cut
 *blx.bib
 .bak 
 .mtc
