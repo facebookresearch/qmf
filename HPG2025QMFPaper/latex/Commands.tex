@@ -143,6 +143,11 @@
 \newcommand{\add}[1]{\ifchanges{\textcolor{blue}{#1}}\else #1\fi}
 \newcommand{\removeTableRow}{\rowcolor{red}}
 
+\newif\ifchangesII
+\changesIItrue
+% \changesIIfalse
+\newcommand{\replaceII}[2]{\ifchangesII{\textcolor{red}{#1}\textcolor{blue}{#2}}\else #2\fi}
+
 % paper notations
 \newcommand{\numBS}{S} % F for frames
 \newcommand{\numVertices}{N}
