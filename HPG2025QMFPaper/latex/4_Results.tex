@@ -72,7 +72,7 @@ We can observe that our sparse factorization methods are significantly faster th
 When evaluating on the GPU, we noted that a common scenario would be to animate multiple faces per frame. To that end, we run 10 animations concurrently.  Results for our CUDA implementation are shown in \Figure{fig:RuntimeCostGPU}.  We note that
 10.66-bit quantization incurs a fairly heavy runtime penalty of about 30\% on the CPU, but a smaller penalty up to about 15\% on the GPU.
 
-Detailed results for all experiments are shown in \Table{tab:FullResults}.   \replaceII{Full optimization code for our method will be released open source concurrent to the conference.}{We have made our sparse factorization optimization code available at www.dummy.url}  See the supplemental video to view runtime results and the supplemental PDF for CPU code.
+Detailed results for all experiments are shown in \Table{tab:FullResults}. We have made our sparse factorization optimization code available at \url{https://github.com/facebookresearch/qmf}. See the supplemental video to view runtime results and the supplemental PDF for CPU code.
 %We have open-sourced our codebase at
 
 %--
