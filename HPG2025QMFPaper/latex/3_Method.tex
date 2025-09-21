@@ -1,10 +1,10 @@
 \section{Method}
 A classical blendshape model comprising $\numVertices$ vertices and $\numBS$ blendshapes, can be formulated using the rest pose mesh and "deltas" between the rest pose and individual blendshapes \cite{lewis2014practice}:
 \begin{equation}
-  \replace{\vertexPos_{0,i}}{\vertexRestPose_i} + \sum_{k} \bSWeight_k \Delta\vertexPos_{k,i},
+  \vertexRestPose_i + \sum_{k} \bSWeight_k \Delta\vertexPos_{k,i},
 \label {eq:ShapeCalculation}
 \end{equation}
-where $\replace{\vertexPos_{0,i}}{\vertexRestPose_i}\in\reals^3$ is the $i$-th rest-pose vertex, $\Delta\vertexPos_{k,i}$  denotes the positional difference between the $i$-th vertex of the $k$-th blendshape and its corresponding vertex in the rest pose, and
+where $\vertexRestPose_i\in\reals^3$ is the $i$-th rest-pose vertex, $\Delta\vertexPos_{k,i}$  denotes the positional difference between the $i$-th vertex of the $k$-th blendshape and its corresponding vertex in the rest pose, and
 $\bSWeight_k$ are blendshape weights defining facial expression; in this paper, we treat these as inputs. In typical runtime systems, the $\bSWeight_k$ are computed via facial rigs which may also contain nonlinearities \cite{lewis2014practice}, but the subsequent blending is linear. We can stack all of the blendshapes into a matrix $\matA\in\reals^{3\numBS \times \numVertices}$:
 \[
 \matA =
@@ -14,13 +14,12 @@ $\bSWeight_k$ are blendshape weights defining facial expression; in this paper, 
   \Delta\vertexPos_{\numBS,1} & \dots & \Delta\vertexPos_{\numBS,\numVertices} \\
 \end{bmatrix}
 \]
-\add{and write \Equation{eq:ShapeCalculation} in matrix form:
+and write \Equation{eq:ShapeCalculation} in matrix form:
 \begin{equation}
 \restPose + \matBSWeight\matA,
 \label {eq:MatShapeCalculation}
 \end{equation}
 where $\matBSWeight = (\identity \bSWeight_1, \dots, \identity \bSWeight_\numBS)$, $\identity$ is a $3\times3$ identity matrix and $\restPose\in\reals^{3\times\numVertices}$ are vertex positions of the rest pose.
-}
 Modern models often consist of hundreds to thousands of blendshapes and thus the storage of the matrix $\matA$ is an important consideration. The runtime speed of facial expression calculation is primarily determined by fetching elements of $\matA$ from memory.
 The main objectives of our method is to develop an efficient representation for $\matA$ to enhance the real-time performance of facial expression calculations while simultaneously reducing the memory footprint.
 
@@ -114,7 +113,7 @@ Since these calculations are performed only once, prior to the optimization proc
 %
 \begin{figure}
     \includegraphics{wrinkles.pdf}
-    \caption{\replace{Wrinkle density calculation and QMF Results (left to right): result with original loss function; result with new loss (wrinkles on right side only); result with new loss and wrinkle map (wrinkles on both sides).}{QMF Results. Synthetic dataset: every second blendshape is "right eyebrow up" with a single "left eyebrow up." Target expression is "both eyebrows up." (left to right): original loss; new loss (wrinkles on right side only); new loss with wrinkle map $\wrinklesMap$ (wrinkles on both sides).}}
+    \caption{QMF Results. Synthetic dataset: every second blendshape is "right eyebrow up" with a single "left eyebrow up." Target expression is "both eyebrows up." (left to right): original loss; new loss (wrinkles on right side only); new loss with wrinkle map $\wrinklesMap$ (wrinkles on both sides).}
     \label{fig:QMFNewNormAndWrinkles}
 \end{figure}
 %
@@ -163,7 +162,7 @@ We store $V_{\mathrm{min}}$, $V_{\mathrm{max}}$, and $\numBitsPerNz$, and this a
   V = V_{\mathrm{min}} + (V_\numBitsPerNz \cdot (V_{\mathrm{max}} - V_{\mathrm{min}}) )/(2^\numBitsPerNz - 1)
 \end{equation*}
 
-\add{To store the indices and quantized non-zero values of both matrices $\matB$ and $\matC$, we require $\numVertices + 3\numBS + \numNonzeroBC + \numNonzeroBC\numBitsPerNz/8$ bytes.}
+To store the indices and quantized non-zero values of both matrices $\matB$ and $\matC$, we require $\numVertices + 3\numBS + \numNonzeroBC + \numNonzeroBC\numBitsPerNz/8$ bytes.
 
 As shown in \Figure{fig:QuantizationMetrics}, our metrics degrade gradually as we reduce the number of bits per value. Notably, the data indicates that using 8-bit quantized values only slightly compromises the final quality of the shape, seeming to make it a viable option for optimizing memory usage.  However, despite the positional metrics' accuracy, we were able to discern visible noise with larger deformations on our denser models (see \Figure{fig:quantizationNoise}).  This quantization noise corresponds to areas where a small error will have a noticeable effect on local curvature.
 To address this, we employ the average edge angular difference metric (EAD, detailed in \Section{sec:results}) to compare the quantized matrices with their floating-point counterparts. We select a quantization factor that minimizes degradation of this metric, ensuring it remains within a few percent of the original value.
@@ -238,12 +237,12 @@ void computeSparseFactorizationBlendshapes(
 \usebox{\codebox}
 \end{algorithm}
 \end{comment}
-\add{Compared to the  HSS representation of \citet{seo2011compression}, our method employs a much simpler runtime data structure.} %, resulting in more straightforward code
-Calculation of  \replace{\Equation{eq:ShapeCalculation}}{\Equation{eq:MatShapeCalculation}} with sparse representation of matrix $\matA$ requires two matrix multiplications and a vector addition:
+Compared to the  HSS representation of \citet{seo2011compression}, our method employs a much simpler runtime data structure. %, resulting in more straightforward code
+Calculation of  \Equation{eq:MatShapeCalculation} with sparse representation of matrix $\matA$ requires two matrix multiplications and a vector addition:
 \[
   \matBSWeight \matB \matC + \restPose.
 \]
-\remove{where $\matBSWeight = (\identity \matBSWeight_1, \dots, \identity \matBSWeight_\numBS)$, $\identity$ is a $3\times3$ identity matrix and $\restPose\in\reals^{3\times\numVertices}$ are vertex positions of the rest pose.} The result of the first calculation is a dense matrix $\matBSWeight \matB\in\reals^{3\times\numColumnB}$. We allocate the column-major matrix $\matWB$ to hold $3\times\numColumnB$ float numbers and initialize it with zeros.
+The result of the first calculation is a dense matrix $\matBSWeight \matB\in\reals^{3\times\numColumnB}$. We allocate the column-major matrix $\matWB$ to hold $3\times\numColumnB$ float numbers and initialize it with zeros.
 %\BB{TODO, Roman, please fix?}
 \begin{comment}
 {\tiny
