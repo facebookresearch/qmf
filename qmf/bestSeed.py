@@ -6,7 +6,6 @@
 
 import qmf.init as init
 import qmf.train as train
-
 import termcolor as fn
 import torch
 
